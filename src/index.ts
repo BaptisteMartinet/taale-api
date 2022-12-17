@@ -1,6 +1,7 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { StandaloneServerContextFunctionArgument } from '@apollo/server/standalone';
+import env from './utils/env';
 import sequelize from 'db';
 import schema from './schema';
 
@@ -25,7 +26,7 @@ async function init() {
     return;
   }
   const { url } = await startStandaloneServer(server, {
-    listen: { port: 4000 },
+    listen: { port: env.PORT },
     context: async ({ req, res }) => {
       return {
         req,
