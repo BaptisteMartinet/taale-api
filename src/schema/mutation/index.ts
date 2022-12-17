@@ -1,11 +1,12 @@
-import { GraphQLBoolean, GraphQLObjectType } from 'graphql';
+import { GraphQLObjectType } from 'graphql';
+import AccountMutation from './Account';
 
 const MutationType = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
-    test: {
-      type: GraphQLBoolean,
-      resolve: () => true,
+    account: {
+      type: AccountMutation,
+      resolve: () => ({}),
     },
   },
 });
