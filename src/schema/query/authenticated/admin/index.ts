@@ -9,7 +9,7 @@ const AdminQuery = new GraphQLObjectType<unknown, Context>({
   fields: {
     users: {
       type: new GraphQLList(UserType),
-      resolve: (source, args, ctx) => {
+      resolve: () => {
         return User.findAll();
       },
     },
