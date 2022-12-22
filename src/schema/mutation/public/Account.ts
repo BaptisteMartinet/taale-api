@@ -7,7 +7,7 @@ import {
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import env from 'core/env';
-import { User } from 'models';
+import { User } from 'definitions/models';
 import { UserType } from 'schema/output-types';
 
 const AccountMutation = new GraphQLObjectType({

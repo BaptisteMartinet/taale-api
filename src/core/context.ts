@@ -2,7 +2,7 @@ import type { ContextFunction, BaseContext } from '@apollo/server';
 import type { StandaloneServerContextFunctionArgument } from '@apollo/server/standalone';
 import * as jwt from 'jsonwebtoken';
 import env from 'core/env';
-import { User } from 'models';
+import { User } from 'definitions/models';
 
 export interface Context extends BaseContext {
   currentUser?: User;
