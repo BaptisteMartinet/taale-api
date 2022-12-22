@@ -1,10 +1,10 @@
 import type { GraphQLEnumValueConfigMap } from 'graphql';
 
 function buildEnumValues(obj: object): GraphQLEnumValueConfigMap {
-  return Object.values(obj).reduce((prev, value) => {
-    prev[value] = { value };
+  return Object.entries(obj).reduce((prev, [key, value]) => {
+    prev[key] = { value };
     return prev;
-  }, {});
+  }, {} as GraphQLEnumValueConfigMap);
 }
 
 export default buildEnumValues;
