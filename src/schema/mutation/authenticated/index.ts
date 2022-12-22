@@ -1,11 +1,11 @@
-import { GraphQLBoolean, GraphQLObjectType } from 'graphql';
+import { GraphQLObjectType } from 'graphql';
+import { expose } from 'core/graphql';
+import AdminMutation from './admin';
 
 const AuthenticatedMutation = new GraphQLObjectType({
   name: 'AuthenticatedMutation',
   fields: {
-    test: {
-      type: GraphQLBoolean,
-    },
+    admin: expose(AdminMutation, { ensureAdmin: true }),
   },
 });
 
