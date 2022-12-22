@@ -6,7 +6,7 @@ import {
 } from 'graphql';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
-import env from 'utils/env';
+import env from 'core/env';
 import { User } from 'models';
 import { UserType } from 'schema/output-types';
 

@@ -1,15 +1,11 @@
+import type { Context } from 'core/context';
+
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
-import { StandaloneServerContextFunctionArgument } from '@apollo/server/standalone';
-import * as jwt from 'jsonwebtoken';
-import env from './utils/env';
-import sequelize from 'db';
-import { User } from 'models';
+import env from './core/env';
+import sequelize from 'core/db';
+import context from 'core/context';
 import schema from './schema';
-
-interface Context extends StandaloneServerContextFunctionArgument {
-  currentUser?: User;
-}
 
 const server = new ApolloServer<Context>({
   schema,
@@ -20,34 +16,18 @@ const server = new ApolloServer<Context>({
 async function init() {
   try {
     await sequelize.authenticate();
-    console.log('Successfully connected to postgreSQL ✔️');
-    await sequelize.sync({ alter: true });
-    console.log("All models were synchronized successfully. ✔️"); // TODO sync script
+    console.info('Database successfully connected ✔️');
+    await sequelize.sync({ alter: true }); // TODO sync script
+    console.info("Database synchronisation. ✔️");
   } catch (e) {
     console.error('Unable to connect to database:', e);
     return;
   }
-  const { url } = await startStandaloneServer(server, {
+  const instance = await startStandaloneServer(server, {
     listen: { port: env.PORT },
-    context: async ({ req, res }) => {
-      const ctx: Context = { req, res };
-      const authHeader = req.headers.authorization;
-      if (!authHeader)
-        return ctx;
-      const [, token] = authHeader.split(' ');
-      try {
-        const payload = jwt.verify(token, env.JWT_SECRET_KEY) as jwt.JwtPayload;
-        const currentUser = await User.findByPk(payload.userId);
-        if (!currentUser)
-          throw new Error('User does not exist');
-        Object.assign(ctx, { currentUser });
-      } catch (error) {
-        console.error(error);
-      }
-      return ctx;
-    },
+    context,
   });
-  console.log(`🚀 Server ready at: ${url}`);
+  console.info(`🚀 Server ready at: ${instance.url}`);
 }
 
 init().catch((e) => { console.error(e) });

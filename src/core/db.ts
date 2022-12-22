@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize';
-import env from './utils/env';
+import env from './env';
 
 console.log('creating db...');
 

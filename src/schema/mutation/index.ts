@@ -1,13 +1,13 @@
 import { GraphQLObjectType } from 'graphql';
-import AccountMutation from './Account';
+import { expose } from 'core/graphql';
+import PublicMutation from './public';
+import AuthenticatedMutation from './authenticated';
 
 const MutationType = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
-    account: {
-      type: AccountMutation,
-      resolve: () => ({}),
-    },
+    public: expose(PublicMutation),
+    authenticated: expose(AuthenticatedMutation, { ensureAuth: true }),
   },
 });
 
