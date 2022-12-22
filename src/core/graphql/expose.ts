@@ -4,8 +4,11 @@ import type {
 } from 'graphql';
 import type { Context } from 'core/context';
 
-interface ExposeOptions {
-  ensureAuth?: boolean,
+import { Role } from 'definitions/enums';
+
+export interface ExposeOptions {
+  ensureAuth?: boolean;
+  ensureAdmin?: boolean;
 }
 
 function expose(type: GraphQLObjectType, opts?: ExposeOptions): GraphQLFieldConfig<unknown, Context> {
@@ -14,6 +17,8 @@ function expose(type: GraphQLObjectType, opts?: ExposeOptions): GraphQLFieldConf
     resolve: (parent, args, ctx) => {
       if (opts?.ensureAuth && !ctx.currentUser)
         throw new Error('User must be authenticated');
+      if (opts?.ensureAdmin && ctx.currentUser?.role !== Role.Admin)
+        throw new Error('User must be admin');
       return {};
     },
   };

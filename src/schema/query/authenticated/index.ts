@@ -1,11 +1,11 @@
-import { GraphQLBoolean, GraphQLObjectType } from 'graphql';
+import { GraphQLObjectType } from 'graphql';
+import { expose } from 'core/graphql';
+import AdminQuery from './admin';
 
 const AuthenticatedQuery = new GraphQLObjectType({
   name: 'AuthenticatedQuery',
   fields: {
-    test: {
-      type: GraphQLBoolean,
-    },
+    admin: expose(AdminQuery, { ensureAdmin: true }),
   },
 });
 
