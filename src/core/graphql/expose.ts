@@ -1,6 +1,6 @@
 import type {
   GraphQLFieldConfig,
-  GraphQLObjectType
+  GraphQLObjectType,
 } from 'graphql';
 import type { Context } from 'core/context';
 
