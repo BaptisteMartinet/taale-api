@@ -3,7 +3,7 @@ import type { Context } from 'core/context';
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import env from './core/env';
-import sequelize from 'core/db';
+import sequelize from 'core/sequelize';
 import context from 'core/context';
 import schema from './schema';
 

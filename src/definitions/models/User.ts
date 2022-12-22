@@ -5,7 +5,7 @@ import {
   InferCreationAttributes,
   CreationOptional,
 } from 'sequelize';
-import sequelize from 'core/db';
+import sequelize from 'core/sequelize';
 import { Role } from 'definitions/enums';
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
