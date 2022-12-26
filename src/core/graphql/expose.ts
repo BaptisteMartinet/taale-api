@@ -15,7 +15,7 @@ export interface ExposeOptions {
 
 function expose(type: GraphQLObjectType, opts?: ExposeOptions): GraphQLFieldConfig<unknown, Context> {
   return {
-    type: type,
+    type,
     ...(opts?.ensureSource ? { args: { id: { type: GraphQLInt } } } : null),
     resolve: async (parent, args, ctx) => {
       const { id } = args;
