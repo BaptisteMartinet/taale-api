@@ -9,7 +9,7 @@ import {
   ForeignKey,
 } from 'sequelize';
 import sequelize from 'core/sequelize';
-import type { User } from 'definitions/models';
+import type { User, Sentence } from 'definitions/models';
 
 class Story extends Model<InferAttributes<Story>, InferCreationAttributes<Story>> {
   declare id: CreationOptional<number>;
@@ -20,9 +20,11 @@ class Story extends Model<InferAttributes<Story>, InferCreationAttributes<Story>
   declare updatedAt: CreationOptional<Date>;
 
   declare owner?: NonAttribute<User>;
+  declare sentences?: NonAttribute<Sentence[]>;
 
   declare static associations: {
     owner: Association<Story, User>;
+    sentences: Association<Story, Sentence>;
   };
 }
 

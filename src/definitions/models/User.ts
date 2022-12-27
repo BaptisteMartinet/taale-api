@@ -9,7 +9,7 @@ import {
 } from 'sequelize';
 import sequelize from 'core/sequelize';
 import { Role } from 'definitions/enums';
-import type { Story } from 'definitions/models';
+import type { Story, Sentence } from 'definitions/models';
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: CreationOptional<number>;
@@ -22,9 +22,11 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare updatedAt: CreationOptional<Date>;
 
   declare stories?: NonAttribute<Story[]>;
+  declare sentences?: NonAttribute<Sentence[]>;
 
   declare static associations: {
     stories: Association<User, Story>;
+    sentences: Association<User, Sentence>;
   };
 }
 
