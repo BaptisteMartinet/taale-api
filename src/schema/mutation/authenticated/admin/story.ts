@@ -12,13 +12,15 @@ const StoryMutation = new GraphQLObjectType<Story, Context>({
       args: {
         open: { type: new GraphQLNonNull(GraphQLBoolean) },
       },
-      resolve: (source, args, ctx) => {
+      resolve: async (source, args, ctx) => {
+        const { open } = args;
         const { currentUser } = ctx;
         assert(currentUser);
-        return Story.create({
+        const story = await Story.create({
           ownerId: currentUser.id,
-          open: true,
+          open
         });
+        return story;
       },
     },
     // update
