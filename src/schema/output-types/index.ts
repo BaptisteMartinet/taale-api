@@ -22,3 +22,12 @@ export const StoryType = new GraphQLObjectType({
     owner: { type: UserType },
   },
 });
+
+export const SentenceType = new GraphQLObjectType({
+  name: 'Sentence',
+  fields: {
+    text: { type: GraphQLString },
+    createdAt: { type: GraphQLDate },
+    updatedAt: { type: GraphQLDate },
+  },
+});
