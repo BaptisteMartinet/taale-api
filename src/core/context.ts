@@ -5,6 +5,7 @@ import env from 'core/env';
 import { User } from 'definitions/models';
 
 export interface Context extends BaseContext {
+  currentUserId?: number;
   currentUser?: User;
 }
 
@@ -14,12 +15,11 @@ const context: ContextFunction<[StandaloneServerContextFunctionArgument], Contex
   if (!authHeader)
     return ctx;
   const [, token] = authHeader.split(' ');
+  if (!token)
+    return ctx;
   try {
     const payload = jwt.verify(token, env.JWT_SECRET_KEY) as jwt.JwtPayload;
-    const currentUser = await User.findByPk(payload.userId);
-    if (!currentUser)
-      throw new Error('User does not exist');
-    Object.assign(ctx, { currentUser });
+    Object.assign(ctx, { currentUserId: payload.userId });
   } catch (error) {
     console.error(error);
   }
