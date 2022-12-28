@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { GraphQLFieldConfig, GraphQLObjectType } from 'graphql';
+import type { GraphQLFieldConfig, GraphQLOutputType } from 'graphql';
 import type { ModelStatic } from 'sequelize';
 import type { Context } from 'core/context';
 
@@ -12,7 +12,7 @@ export interface ExposeOptions {
   ensureSource?: ModelStatic<any>;
 }
 
-function expose(type: GraphQLObjectType, opts?: ExposeOptions): GraphQLFieldConfig<unknown, Context> {
+function expose(type: GraphQLOutputType, opts?: ExposeOptions): GraphQLFieldConfig<unknown, Context> {
   return {
     type,
     ...(opts?.ensureSource ? { args: { id: { type: GraphQLInt } } } : null),
