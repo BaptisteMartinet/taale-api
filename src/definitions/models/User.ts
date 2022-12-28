@@ -1,3 +1,5 @@
+import type { Story, Sentence } from 'definitions/models';
+
 import {
   DataTypes,
   Model,
@@ -10,7 +12,6 @@ import {
 import { PasswordMinLenght } from 'core/constants';
 import sequelize from 'core/sequelize';
 import { Role } from 'definitions/enums';
-import type { Story, Sentence } from 'definitions/models';
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: CreationOptional<number>;
