@@ -39,7 +39,7 @@ Sentence.init({
   ownerId: { type: DataTypes.INTEGER, allowNull: false },
   storyId: { type: DataTypes.INTEGER, allowNull: false },
   parentSentenceId: { type: DataTypes.INTEGER, allowNull: true },
-  text: { type: DataTypes.INTEGER, allowNull: false },
+  text: { type: DataTypes.TEXT, allowNull: false },
   createdAt: DataTypes.DATE,
   updatedAt: DataTypes.DATE,
 }, {
