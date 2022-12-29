@@ -14,18 +14,29 @@ export const UserType = new GraphQLObjectType({
   },
 });
 
+export const UserRestricted = new GraphQLObjectType({
+  name: 'UserRestricted',
+  fields: {
+    id: { type: GraphQLInt },
+    username: { type: GraphQLString },
+  },
+});
+
 export const StoryType = new GraphQLObjectType({
   name: 'Story',
   fields: {
     id: { type: GraphQLInt },
     open: { type: GraphQLBoolean },
     owner: { type: UserType },
+    createdAt: { type: GraphQLDate },
+    updatedAt: { type: GraphQLDate },
   },
 });
 
 export const SentenceType = new GraphQLObjectType({
   name: 'Sentence',
   fields: {
+    id: { type: GraphQLInt },
     text: { type: GraphQLString },
     createdAt: { type: GraphQLDate },
     updatedAt: { type: GraphQLDate },
