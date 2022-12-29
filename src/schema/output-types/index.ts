@@ -1,6 +1,6 @@
 import { GraphQLBoolean, GraphQLInt, GraphQLObjectType, GraphQLString } from 'graphql';
 import { GraphQLDate } from 'core/graphql/scalars';
-import { RoleEnum } from 'definitions/enums';
+import { RoleEnum, LocaleEnum } from 'definitions/enums';
 
 export const UserType = new GraphQLObjectType({
   name: 'User',
@@ -27,6 +27,7 @@ export const StoryType = new GraphQLObjectType({
   fields: {
     id: { type: GraphQLInt },
     open: { type: GraphQLBoolean },
+    locale: { type: LocaleEnum },
     owner: { type: UserType },
     createdAt: { type: GraphQLDate },
     updatedAt: { type: GraphQLDate },
