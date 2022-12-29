@@ -4,6 +4,7 @@ import type { ModelStatic } from 'sequelize';
 import type { Context } from 'core/context';
 
 import { GraphQLInt } from 'graphql';
+import { User } from 'definitions/models';
 import { Role } from 'definitions/enums';
 
 export interface ExposeOptions {
@@ -21,6 +22,13 @@ function expose(type: GraphQLOutputType, opts?: ExposeOptions): GraphQLFieldConf
       if (!opts)
         return {};
       const { ensureAuth, ensureAdmin, ensureSource } = opts;
+      const { currentUser, currentUserId } = ctx;
+      if (ensureAuth && !currentUser && currentUserId) {
+        const user = await User.findByPk(currentUserId);
+        if (!user)
+          throw new Error('User does not exist');
+        ctx.currentUser = user;
+      }
       if (ensureAuth && !ctx.currentUser)
         throw new Error('User must be authenticated');
       if (ensureAdmin && ctx.currentUser?.role !== Role.Admin)
