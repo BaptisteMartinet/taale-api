@@ -6,7 +6,7 @@ import {
   GraphQLString,
 } from 'graphql';
 import { Context } from 'core/context';
-import { Sentence, Story } from 'definitions/models';
+import { Sentence } from 'definitions/models';
 import { SentenceType } from 'schema/output-types';
 
 const SentenceMutation = new GraphQLObjectType<unknown, Context>({
@@ -15,21 +15,20 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
     create: {
       type: SentenceType,
       args: {
-        storyId: { type: new GraphQLNonNull(GraphQLInt) },
         parentSentenceId: { type: new GraphQLNonNull(GraphQLInt) },
         text: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve: async (source, args, ctx) => {
-        const { storyId, parentSentenceId, text } = args;
+        const { parentSentenceId, text } = args;
         const { currentUser } = ctx;
         assert(currentUser);
-        if (!(await Story.findByPk(storyId)))
-          throw new Error(`Story#${storyId} does not exist`);
-        if (!(await Sentence.findByPk(parentSentenceId)))
-          throw new Error(`Sentence#${parentSentenceId} does not exist`);
+        const parentSentence = await Sentence.findByPk(parentSentenceId);
+        if (!parentSentence)
+          throw new Error(`Parent Sentence#${parentSentenceId} does not exist`);
+        const parentSentenceStoryId = parentSentence.storyId;
         const sentence = await Sentence.create({
           ownerId: currentUser.id,
-          storyId,
+          storyId: parentSentenceStoryId,
           parentSentenceId,
           text,
         });
