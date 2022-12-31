@@ -3,6 +3,7 @@ import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { Context } from 'core/context';
 import { Sentence, Story } from 'definitions/models';
 import { LocaleEnum } from 'definitions/enums';
+import { genSentenceText } from 'definitions/helpers';
 import { StoryType } from 'schema/output-types';
 
 const StoryMutation = new GraphQLObjectType<Story, Context>({
@@ -23,10 +24,11 @@ const StoryMutation = new GraphQLObjectType<Story, Context>({
           open,
           locale,
         });
+        const initialText = genSentenceText(locale);
         await Sentence.create({
           ownerId: currentUser.id,
           storyId: story.id,
-          text: 'Il était une fois,', // TODO lang
+          text: initialText,
         });
         return story;
       },
