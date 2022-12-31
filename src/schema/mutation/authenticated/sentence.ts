@@ -6,6 +6,7 @@ import {
   GraphQLString,
 } from 'graphql';
 import { Context } from 'core/context';
+import ensureModelExistence from 'core/sequelize/ensureModelExistence';
 import { Sentence } from 'definitions/models';
 import { SentenceType } from 'schema/output-types';
 
@@ -22,9 +23,7 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         const { parentSentenceId, text } = args;
         const { currentUser } = ctx;
         assert(currentUser);
-        const parentSentence = await Sentence.findByPk(parentSentenceId);
-        if (!parentSentence)
-          throw new Error(`Parent Sentence#${parentSentenceId} does not exist`);
+        const parentSentence = await ensureModelExistence(parentSentenceId, Sentence);
         const parentSentenceStoryId = parentSentence.storyId;
         const sentence = await Sentence.create({
           ownerId: currentUser.id,
