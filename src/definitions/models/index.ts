@@ -1,6 +1,7 @@
 import User from './User';
 import Story from './Story';
 import Sentence from './Sentence';
+import Report from './Report';
 
 Story.belongsTo(User, {
   foreignKey: 'ownerId',
@@ -22,6 +23,11 @@ User.hasMany(Sentence, {
   sourceKey: 'id',
   foreignKey: 'ownerId',
   as: 'sentences',
+});
+User.hasMany(Report, {
+  sourceKey: 'id',
+  foreignKey: 'ownerId',
+  as: 'reports',
 });
 
 Sentence.belongsTo(User, {
@@ -45,8 +51,15 @@ Sentence.hasMany(Sentence, {
   as: 'sentences',
 });
 
+Report.belongsTo(User, {
+  foreignKey: 'ownerId',
+  targetKey: 'id',
+  as: 'owner',
+});
+
 export {
   User,
   Story,
   Sentence,
+  Report,
 };
