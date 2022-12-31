@@ -18,9 +18,9 @@ function expose(type: GraphQLOutputType, opts?: ExposeOptions): GraphQLFieldConf
     type,
     ...(opts?.ensureSource ? { args: { id: { type: GraphQLInt } } } : null),
     resolve: async (parent, args, ctx) => {
-      const { id } = args;
       if (!opts)
         return {};
+      const { id } = args;
       const { ensureAuth, ensureAdmin, ensureSource } = opts;
       const { currentUser, currentUserId } = ctx;
       if (ensureAuth && !currentUser && currentUserId) {
