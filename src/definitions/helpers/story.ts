@@ -5,7 +5,7 @@ const LocaleToText = new Map<Locale, string>([
   [Locale.EN, 'Once upon a time,'],
 ]);
 
-export function genSentenceText(locale: Locale): string {
+export function genInitialSentenceText(locale: Locale): string {
   const text = LocaleToText.get(locale);
   if (!text)
     throw new Error(`Locale (${locale}) not supported`);
