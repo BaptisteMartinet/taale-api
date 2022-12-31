@@ -2,13 +2,13 @@ import type { Context } from 'core/context';
 
 import { GraphQLList, GraphQLObjectType } from 'graphql';
 import { User } from 'definitions/models';
-import { UserType } from 'schema/output-types';
+import { UserRestricted } from 'schema/output-types';
 
 const AdminQuery = new GraphQLObjectType<unknown, Context>({
   name: 'AdminQuery',
   fields: {
     users: {
-      type: new GraphQLList(UserType),
+      type: new GraphQLList(UserRestricted),
       resolve: () => {
         return User.findAll();
       },
