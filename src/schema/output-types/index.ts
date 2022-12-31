@@ -1,45 +1,52 @@
-import { GraphQLBoolean, GraphQLInt, GraphQLObjectType, GraphQLString } from 'graphql';
+import {
+  GraphQLBoolean,
+  GraphQLInt,
+  GraphQLList,
+  GraphQLObjectType,
+  GraphQLString,
+} from 'graphql';
 import { GraphQLDate } from 'core/graphql/scalars';
 import { RoleEnum, LocaleEnum } from 'definitions/enums';
 
 export const UserType = new GraphQLObjectType({
   name: 'User',
-  fields: {
+  fields: () => ({
     id: { type: GraphQLInt },
     username: { type: GraphQLString },
     email: { type: GraphQLString },
     role: { type: RoleEnum },
     createdAt: { type: GraphQLDate },
     updatedAt: { type: GraphQLDate },
-  },
+  }),
 });
 
 export const UserRestricted = new GraphQLObjectType({
   name: 'UserRestricted',
-  fields: {
+  fields: () => ({
     id: { type: GraphQLInt },
     username: { type: GraphQLString },
-  },
+  }),
 });
 
 export const StoryType = new GraphQLObjectType({
   name: 'Story',
-  fields: {
+  fields: () => ({
     id: { type: GraphQLInt },
     open: { type: GraphQLBoolean },
     locale: { type: LocaleEnum },
-    owner: { type: UserType },
+    owner: { type: UserRestricted },
+    sentences: { type: new GraphQLList(SentenceType) },
     createdAt: { type: GraphQLDate },
     updatedAt: { type: GraphQLDate },
-  },
+  }),
 });
 
 export const SentenceType = new GraphQLObjectType({
   name: 'Sentence',
-  fields: {
+  fields: () => ({
     id: { type: GraphQLInt },
     text: { type: GraphQLString },
     createdAt: { type: GraphQLDate },
     updatedAt: { type: GraphQLDate },
-  },
+  }),
 });

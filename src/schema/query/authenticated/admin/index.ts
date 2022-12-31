@@ -1,17 +1,20 @@
 import type { Context } from 'core/context';
 
 import { GraphQLList, GraphQLObjectType } from 'graphql';
-import { User } from 'definitions/models';
-import { UserRestricted } from 'schema/output-types';
+import { User, Story } from 'definitions/models';
+import { UserRestricted, StoryType } from 'schema/output-types';
 
 const AdminQuery = new GraphQLObjectType<unknown, Context>({
   name: 'AdminQuery',
   fields: {
     users: {
       type: new GraphQLList(UserRestricted),
-      resolve: () => {
-        return User.findAll();
-      },
+      resolve: () => User.findAll(),
+    },
+
+    stories: {
+      type: new GraphQLList(StoryType),
+      resolve: () => Story.findAll({ include: [ Story.associations.owner, Story.associations.sentences ] }),
     },
   },
 });
