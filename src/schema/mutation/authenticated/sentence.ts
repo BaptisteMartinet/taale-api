@@ -5,7 +5,9 @@ import {
   GraphQLObjectType,
   GraphQLString,
 } from 'graphql';
+import { Op } from 'sequelize';
 import { Context } from 'core/context';
+import { Minute } from 'core/utils/time';
 import ensureModelExistence from 'core/sequelize/ensureModelExistence';
 import { Sentence } from 'definitions/models';
 import { SentenceType } from 'schema/output-types';
@@ -23,6 +25,14 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         const { parentSentenceId, text } = args;
         const { currentUser } = ctx;
         assert(currentUser);
+        const nbSentencesInLast5Mins = await Sentence.count({
+          where: {
+            ownerId: currentUser.id,
+            createdAt: { [Op.gte]: (Date.now() - (Minute * 5)) },
+          },
+        });
+        if (nbSentencesInLast5Mins >= 3)
+          throw new Error('Spam detected');
         const parentSentence = await ensureModelExistence(parentSentenceId, Sentence);
         const parentSentenceStoryId = parentSentence.storyId;
         const sentence = await Sentence.create({
