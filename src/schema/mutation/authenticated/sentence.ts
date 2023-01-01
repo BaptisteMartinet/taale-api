@@ -13,7 +13,7 @@ import ensureModelExistence from 'core/sequelize/ensureModelExistence';
 import { Sentence, Report } from 'definitions/models';
 import { SentenceType } from 'schema/output-types';
 
-const SentenceMutation = new GraphQLObjectType<Sentence, Context>({
+const SentenceMutation = new GraphQLObjectType<unknown, Context>({
   name: 'SentenceMutation',
   fields: {
     create: {
@@ -53,6 +53,8 @@ const SentenceMutation = new GraphQLObjectType<Sentence, Context>({
       resolve: async (source, args, ctx) => {
         const { currentUser } = ctx;
         assert(currentUser);
+        if (!(source instanceof Sentence))
+          return false;
         await Report.create({
           ownerId: currentUser.id,
           resourceType: Sentence.name,
