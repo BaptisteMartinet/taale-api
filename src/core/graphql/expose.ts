@@ -4,6 +4,7 @@ import type { ModelStatic } from 'sequelize';
 import type { Context } from 'core/context';
 
 import { GraphQLInt } from 'graphql';
+import ensureModelExistence from 'core/sequelize/ensureModelExistence';
 import { User } from 'definitions/models';
 import { Role } from 'definitions/enums';
 
@@ -34,10 +35,7 @@ function expose(type: GraphQLOutputType, opts?: ExposeOptions): GraphQLFieldConf
       if (ensureAdmin && ctx.currentUser?.role !== Role.Admin)
         throw new Error('User must be admin');
       if (ensureSource && id) {
-        const source = await ensureSource.findByPk(id);
-        if (!source)
-          throw new Error(`Resource#${id} does not exists`);
-        return source;
+        return ensureModelExistence(id, ensureSource);
       }
       return {};
     },
