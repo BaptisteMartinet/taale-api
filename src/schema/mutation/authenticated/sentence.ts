@@ -1,5 +1,6 @@
 import assert from 'assert';
 import {
+  GraphQLBoolean,
   GraphQLInt,
   GraphQLNonNull,
   GraphQLObjectType,
@@ -9,10 +10,10 @@ import { Op } from 'sequelize';
 import { Context } from 'core/context';
 import { Minute } from 'core/utils/time';
 import ensureModelExistence from 'core/sequelize/ensureModelExistence';
-import { Sentence } from 'definitions/models';
+import { Sentence, Report } from 'definitions/models';
 import { SentenceType } from 'schema/output-types';
 
-const SentenceMutation = new GraphQLObjectType<unknown, Context>({
+const SentenceMutation = new GraphQLObjectType<Sentence, Context>({
   name: 'SentenceMutation',
   fields: {
     create: {
@@ -46,6 +47,21 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
     },
     // update
     // delete
+
+    report: {
+      type: GraphQLBoolean,
+      resolve: async (source, args, ctx) => {
+        const { currentUser } = ctx;
+        assert(currentUser);
+        await Report.create({
+          ownerId: currentUser.id,
+          resourceType: Sentence.name,
+          resourceId: source.id,
+        });
+        // TODO do something if resource is reported too much (delete?)
+        return true;
+      },
+    },
   },
 });
 
