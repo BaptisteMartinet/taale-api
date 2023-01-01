@@ -20,12 +20,3 @@ export const LocaleEnum = new GraphQLEnumType({
   name: 'Locale',
   values: buildEnumValues(Locale),
 });
-
-export enum ReportableType {
-  Sentence = 'Sentence',
-}
-
-export const ReportableTypeEnum = new GraphQLEnumType({
-  name: 'ReportableType',
-  values: buildEnumValues(ReportableType),
-});
