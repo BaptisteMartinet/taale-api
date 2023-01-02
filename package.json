@@ -10,7 +10,8 @@
     "watch": "tsc-watch --onSuccess \"yarn start\"",
     "lint": "eslint . --ext .ts",
     "lint-fix": "yarn lint -- --fix",
-    "script": "yarn --silent tsc && yarn --silent start"
+    "script": "yarn --silent tsc && yarn --silent start",
+    "postinstall": "yarn build"
   },
   "dependencies": {
     "@apollo/server": "^4.3.0",
