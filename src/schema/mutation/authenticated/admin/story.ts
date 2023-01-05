@@ -6,7 +6,7 @@ import { LocaleEnum } from 'definitions/enums';
 import { genInitialSentenceText } from 'definitions/helpers';
 import { StoryType } from 'schema/output-types';
 
-const StoryMutation = new GraphQLObjectType<Story, Context>({
+const StoryMutation = new GraphQLObjectType<unknown, Context>({
   name: 'StoryMutation',
   fields: {
     create: {
@@ -35,6 +35,16 @@ const StoryMutation = new GraphQLObjectType<Story, Context>({
     },
     // update
     // delete
+
+    close: {
+      type: GraphQLBoolean,
+      resolve: async (source, args, ctx) => {
+        if (!(source instanceof Story))
+          throw new Error('Source must be Story');
+        await source.update({ open: false });
+        return true;
+      },
+    },
   },
 });
 
