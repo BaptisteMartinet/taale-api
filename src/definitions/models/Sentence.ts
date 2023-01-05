@@ -14,9 +14,9 @@ import sequelize from 'core/sequelize';
 
 class Sentence extends Model<InferAttributes<Sentence>, InferCreationAttributes<Sentence>> {
   declare id: CreationOptional<number>;
-  declare ownerId: ForeignKey<User['id']>;
-  declare storyId: ForeignKey<Story['id']>;
-  declare parentSentenceId: ForeignKey<number>;
+  declare ownerId: ForeignKey<number>;
+  declare storyId: ForeignKey<number>;
+  declare parentSentenceId: CreationOptional<ForeignKey<number>>;
   declare text: string;
   declare theEnd: CreationOptional<boolean>;
   declare createdAt: CreationOptional<Date>;

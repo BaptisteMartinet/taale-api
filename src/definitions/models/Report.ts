@@ -14,7 +14,7 @@ import sequelize from 'core/sequelize';
 
 class Report extends Model<InferAttributes<Report>, InferCreationAttributes<Report>> {
   declare id: CreationOptional<number>;
-  declare ownerId: ForeignKey<User['id']>;
+  declare ownerId: ForeignKey<number>;
   declare resourceType: string;
   declare resourceId: number;
 

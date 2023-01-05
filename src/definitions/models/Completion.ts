@@ -14,8 +14,8 @@ import sequelize from 'core/sequelize';
 
 class Completion extends Model<InferAttributes<Completion>, InferCreationAttributes<Completion>> {
   declare id: CreationOptional<number>;
-  declare ownerId: ForeignKey<User['id']>;
-  declare sentenceId: ForeignKey<Sentence['id']>;
+  declare ownerId: ForeignKey<number>;
+  declare sentenceId: ForeignKey<number>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
