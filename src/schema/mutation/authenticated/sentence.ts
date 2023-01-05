@@ -7,10 +7,11 @@ import {
   GraphQLString,
 } from 'graphql';
 import { Op } from 'sequelize';
+import { nbCompletionsToMarkComplete } from 'core/constants';
 import { Context } from 'core/context';
 import { Minute } from 'core/utils/time';
 import ensureModelExistence from 'core/sequelize/ensureModelExistence';
-import { Sentence, Report } from 'definitions/models';
+import { Sentence, Report, Completion } from 'definitions/models';
 import { SentenceType } from 'schema/output-types';
 
 const SentenceMutation = new GraphQLObjectType<unknown, Context>({
@@ -61,6 +62,28 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
           resourceId: source.id,
         });
         // TODO do something if resource is reported too much (delete?)
+        return true;
+      },
+    },
+
+    markCompleted: {
+      type: GraphQLBoolean,
+      resolve: async (source, args, ctx) => {
+        const { currentUser } = ctx;
+        assert(currentUser);
+        if (!(source instanceof Sentence))
+          return false;
+        if (source.theEnd === true)
+          return false;
+        await Completion.create({
+          ownerId: currentUser.id,
+          sentenceId: source.id,
+        });
+        const completionCount = await Completion.count({
+          where: { sentenceId: source.id },
+        });
+        if (completionCount >= nbCompletionsToMarkComplete)
+          await source.update({ theEnd: true });
         return true;
       },
     },
