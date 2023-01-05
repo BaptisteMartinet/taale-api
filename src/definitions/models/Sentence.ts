@@ -1,3 +1,5 @@
+import type { Completion, Story, User } from 'definitions/models';
+
 import {
   DataTypes,
   Model,
@@ -9,7 +11,6 @@ import {
   ForeignKey,
 } from 'sequelize';
 import sequelize from 'core/sequelize';
-import type { Story, User } from 'definitions/models';
 
 class Sentence extends Model<InferAttributes<Sentence>, InferCreationAttributes<Sentence>> {
   declare id: CreationOptional<number>;
@@ -17,7 +18,7 @@ class Sentence extends Model<InferAttributes<Sentence>, InferCreationAttributes<
   declare storyId: ForeignKey<Story['id']>;
   declare parentSentenceId: ForeignKey<Sentence['id']>;
   declare text: string;
-
+  declare theEnd: CreationOptional<boolean>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
@@ -25,12 +26,13 @@ class Sentence extends Model<InferAttributes<Sentence>, InferCreationAttributes<
   declare story?: NonAttribute<Story>;
   declare parentSentence?: NonAttribute<Sentence>;
   declare sentences?: NonAttribute<Sentence[]>;
-
+  declare completions?: NonAttribute<Completion[]>;
   declare static associations: {
     owner: Association<Sentence, User>;
     story: Association<Sentence, Story>;
     parentSentence: Association<Sentence, Sentence>;
     sentences: Association<Sentence, Sentence>;
+    completions: Association<Sentence, Completion>;
   };
 }
 
@@ -40,6 +42,7 @@ Sentence.init({
   storyId: { type: DataTypes.INTEGER, allowNull: false },
   parentSentenceId: { type: DataTypes.INTEGER, allowNull: true },
   text: { type: DataTypes.TEXT, allowNull: false },
+  theEnd: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
   createdAt: DataTypes.DATE,
   updatedAt: DataTypes.DATE,
 }, {
