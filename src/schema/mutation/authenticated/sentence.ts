@@ -36,10 +36,9 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         if (nbSentencesInLast5Mins >= 3)
           throw new Error('Spam detected');
         const parentSentence = await ensureModelExistence(parentSentenceId, Sentence);
-        const parentSentenceStoryId = parentSentence.storyId;
         const sentence = await Sentence.create({
           ownerId: currentUser.id,
-          storyId: parentSentenceStoryId,
+          storyId: parentSentence.storyId,
           parentSentenceId,
           text,
         });
@@ -61,7 +60,7 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
           resourceType: Sentence.name,
           resourceId: source.id,
         });
-        // TODO do something if resource is reported too much (delete?)
+        // TODO do something if resource is reported too much (delete?) and handle spam
         return true;
       },
     },
