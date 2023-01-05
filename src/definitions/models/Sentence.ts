@@ -16,7 +16,7 @@ class Sentence extends Model<InferAttributes<Sentence>, InferCreationAttributes<
   declare id: CreationOptional<number>;
   declare ownerId: ForeignKey<User['id']>;
   declare storyId: ForeignKey<Story['id']>;
-  declare parentSentenceId: ForeignKey<Sentence['id']>;
+  declare parentSentenceId: ForeignKey<number>;
   declare text: string;
   declare theEnd: CreationOptional<boolean>;
   declare createdAt: CreationOptional<Date>;
