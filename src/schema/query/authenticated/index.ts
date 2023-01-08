@@ -1,16 +1,27 @@
+import assert from 'assert';
 import { GraphQLList, GraphQLObjectType } from 'graphql';
 import { PartialStoryNbSentences } from 'core/constants';
 import sequelize from 'core/sequelize';
 import ensureModelExistence from 'core/sequelize/ensureModelExistence';
 import { expose } from 'core/graphql';
+import { Context } from 'core/context';
 import { Sentence } from 'definitions/models';
-import { SentenceType } from 'schema/output-types';
+import { SentenceType, UserType } from 'schema/output-types';
 import AdminQuery from './admin';
 
-const AuthenticatedQuery = new GraphQLObjectType({
+const AuthenticatedQuery = new GraphQLObjectType<unknown, Context>({
   name: 'AuthenticatedQuery',
   fields: {
     admin: expose(AdminQuery, { ensureAdmin: true }),
+
+    account: {
+      type: UserType,
+      resolve: (source, args, ctx) => {
+        const { currentUser } = ctx;
+        assert(currentUser);
+        return currentUser;
+      },
+    },
 
     partialStory: {
       type: new GraphQLList(SentenceType),
