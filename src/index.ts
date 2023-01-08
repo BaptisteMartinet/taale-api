@@ -12,6 +12,8 @@ const server = new ApolloServer<Context>({
   schema,
   cache: 'bounded',
   csrfPrevention: true,
+  // TODO remove these two lines
+  introspection: true,
   plugins: [ ApolloServerPluginLandingPageLocalDefault() ],
 });
 
