@@ -5,6 +5,7 @@ export enum ClientErrorT {
   EmailTaken = 'EmailTaken',
   UsernameTaken = 'UsernameTaken',
   ResourceNotFound = 'ResourceNotFound',
+  SpamDetected = 'SpamDetected',
 }
 
 class ClientError extends GraphQLError {
