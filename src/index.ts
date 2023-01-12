@@ -22,6 +22,7 @@ async function init() {
     await sequelize.authenticate();
     console.info('Database successfully connected ✔️');
     // await sequelize.sync({ alter: { drop: false } }); // TODO sync script
+    // await sequelize.sync({ force: true }); // TODO sync script
   } catch (e) {
     console.error('Unable to connect to database:', e);
     return;
