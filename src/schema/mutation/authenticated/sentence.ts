@@ -45,7 +45,7 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
           timeFrameMs: 5 * Minute,
           recordsLimit: 3,
         });
-        const parentSentence = await ensureModelExistence(parentSentenceId, Sentence);
+        const parentSentence = await ensureModelExistence<Sentence>(parentSentenceId, Sentence);
         const sentence = await Sentence.create({
           ownerId: currentUser.id,
           treeId: parentSentence.treeId,
@@ -63,8 +63,7 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
       resolve: async (source, args, ctx) => {
         const { currentUser } = ctx;
         assert(currentUser);
-        if (!(source instanceof Sentence))
-          return false;
+        assert(source instanceof Sentence);
         if (source.parentSentenceId === null)
           return false;
         if (source.theEnd === true)
@@ -89,8 +88,7 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
       resolve: async (source, args, ctx) => {
         const { currentUser } = ctx;
         assert(currentUser);
-        if (!(source instanceof Sentence))
-          return false;
+        assert(source instanceof Sentence);
         if (source.theEnd === true)
           return false;
         await ensureNotSpam(Completion, {
