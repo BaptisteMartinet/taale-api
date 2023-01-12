@@ -20,7 +20,7 @@ export const UserType = new GraphQLObjectType({
   }),
 });
 
-export const UserRestricted = new GraphQLObjectType({
+export const UserRestrictedType = new GraphQLObjectType({
   name: 'UserRestricted',
   fields: () => ({
     id: { type: GraphQLInt },
@@ -34,7 +34,7 @@ export const TreeType = new GraphQLObjectType({
     id: { type: GraphQLInt },
     open: { type: GraphQLBoolean },
     locale: { type: LocaleEnum },
-    owner: { type: UserRestricted },
+    owner: { type: UserRestrictedType },
     sentences: { type: new GraphQLList(SentenceType) },
     createdAt: { type: GraphQLDate },
     updatedAt: { type: GraphQLDate },
