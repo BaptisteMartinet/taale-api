@@ -17,7 +17,6 @@ class Report extends Model<InferAttributes<Report>, InferCreationAttributes<Repo
   declare ownerId: ForeignKey<number>;
   declare resourceType: string;
   declare resourceId: number;
-
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
