@@ -44,7 +44,7 @@ Sentence.belongsTo(User, {
 Sentence.belongsTo(Tree, {
   foreignKey: 'treeId',
   targetKey: 'id',
-  as: 'story',
+  as: 'tree',
 });
 Sentence.belongsTo(Sentence, {
   foreignKey: 'parentSentenceId',
