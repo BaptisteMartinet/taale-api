@@ -36,6 +36,7 @@ Completion.init({
 }, {
   tableName: 'completions',
   timestamps: true,
+  indexes: [{ fields: ['ownerId', 'sentenceId'], unique: true }],
   sequelize,
 });
 

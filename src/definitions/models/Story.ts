@@ -38,6 +38,7 @@ Story.init({
 }, {
   tableName: 'stories',
   timestamps: true,
+  indexes: [{ fields: ['sentenceId'], unique: true }],
   sequelize,
 });
 

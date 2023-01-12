@@ -36,6 +36,7 @@ Report.init({
 }, {
   tableName: 'reports',
   timestamps: true,
+  indexes: [{ fields: ['ownerId', 'resourceType', 'resourceId'], unique: true }],
   sequelize,
 });
 
