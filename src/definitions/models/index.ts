@@ -3,6 +3,7 @@ import Tree from './Tree';
 import Sentence from './Sentence';
 import Report from './Report';
 import Completion from './Completion';
+import Story from './Story';
 
 Tree.belongsTo(User, {
   foreignKey: 'ownerId',
@@ -61,6 +62,11 @@ Sentence.hasMany(Completion, {
   foreignKey: 'sentenceId',
   as: 'completions'
 });
+Sentence.hasOne(Story, {
+  sourceKey: 'id',
+  foreignKey: 'sentenceId',
+  as: 'story',
+});
 
 Report.belongsTo(User, {
   foreignKey: 'ownerId',
@@ -79,10 +85,17 @@ Completion.belongsTo(Sentence, {
   as: 'sentence',
 });
 
+Story.belongsTo(Sentence, {
+  foreignKey: 'sentenceId',
+  targetKey: 'id',
+  as: 'sentence',
+});
+
 export {
   User,
   Tree,
   Sentence,
   Report,
   Completion,
+  Story,
 };
