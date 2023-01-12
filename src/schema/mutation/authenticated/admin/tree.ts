@@ -1,16 +1,16 @@
 import assert from 'assert';
 import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { Context } from 'core/context';
-import { Sentence, Story } from 'definitions/models';
+import { Sentence, Tree } from 'definitions/models';
 import { LocaleEnum } from 'definitions/enums';
 import { genInitialSentenceText } from 'definitions/helpers';
-import { StoryType } from 'schema/output-types';
+import { TreeType } from 'schema/output-types';
 
-const StoryMutation = new GraphQLObjectType<unknown, Context>({
-  name: 'StoryMutation',
+const TreeMutation = new GraphQLObjectType<unknown, Context>({
+  name: 'TreeMutation',
   fields: {
     create: {
-      type: StoryType,
+      type: TreeType,
       args: {
         open: { type: new GraphQLNonNull(GraphQLBoolean) },
         locale: { type: new GraphQLNonNull(LocaleEnum) },
@@ -19,7 +19,7 @@ const StoryMutation = new GraphQLObjectType<unknown, Context>({
         const { open, locale } = args;
         const { currentUser } = ctx;
         assert(currentUser);
-        const story = await Story.create({
+        const tree = await Tree.create({
           ownerId: currentUser.id,
           open,
           locale,
@@ -27,10 +27,10 @@ const StoryMutation = new GraphQLObjectType<unknown, Context>({
         const initialText = genInitialSentenceText(locale);
         await Sentence.create({
           ownerId: currentUser.id,
-          storyId: story.id,
+          treeId: tree.id,
           text: initialText,
         });
-        return story;
+        return tree;
       },
     },
     // update
@@ -39,8 +39,7 @@ const StoryMutation = new GraphQLObjectType<unknown, Context>({
     close: {
       type: GraphQLBoolean,
       resolve: async (source, args, ctx) => {
-        if (!(source instanceof Story))
-          throw new Error('Source must be Story');
+        assert(source instanceof Tree);
         await source.update({ open: false });
         return true;
       },
@@ -48,4 +47,4 @@ const StoryMutation = new GraphQLObjectType<unknown, Context>({
   },
 });
 
-export default StoryMutation;
+export default TreeMutation;

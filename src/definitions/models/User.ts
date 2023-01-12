@@ -1,4 +1,4 @@
-import type { Story, Sentence, Report, Completion } from 'definitions/models';
+import type { Tree, Sentence, Report, Completion } from 'definitions/models';
 
 import {
   DataTypes,
@@ -23,12 +23,12 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
-  declare stories?: NonAttribute<Story[]>;
+  declare trees?: NonAttribute<Tree[]>;
   declare sentences?: NonAttribute<Sentence[]>;
   declare reports?: NonAttribute<Report[]>;
   declare completions?: NonAttribute<Completion[]>;
   declare static associations: {
-    stories: Association<User, Story>;
+    trees: Association<User, Tree>;
     sentences: Association<User, Sentence>;
     reports: Association<User, Report>;
     completions: Association<User, Completion>;

@@ -1,8 +1,8 @@
 import type { Context } from 'core/context';
 
 import { GraphQLList, GraphQLObjectType } from 'graphql';
-import { User, Story } from 'definitions/models';
-import { UserRestricted, StoryType } from 'schema/output-types';
+import { User, Tree } from 'definitions/models';
+import { UserRestricted, TreeType } from 'schema/output-types';
 
 const AdminQuery = new GraphQLObjectType<unknown, Context>({
   name: 'AdminQuery',
@@ -13,8 +13,8 @@ const AdminQuery = new GraphQLObjectType<unknown, Context>({
     },
 
     stories: {
-      type: new GraphQLList(StoryType),
-      resolve: () => Story.findAll({ include: [ Story.associations.owner, Story.associations.sentences ] }),
+      type: new GraphQLList(TreeType),
+      resolve: () => Tree.findAll({ include: [ Tree.associations.owner, Tree.associations.sentences ] }),
     },
   },
 });

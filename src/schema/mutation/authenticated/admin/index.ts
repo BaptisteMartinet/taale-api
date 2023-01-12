@@ -1,12 +1,12 @@
 import { GraphQLObjectType } from 'graphql';
 import { expose } from 'core/graphql';
-import { Story } from 'definitions/models';
-import StoryMutation from './story';
+import { Tree } from 'definitions/models';
+import TreeMutation from './tree';
 
 const AdminMutation = new GraphQLObjectType({
   name: 'AdminMutation',
   fields: {
-    story: expose(StoryMutation, { ensureSource: Story }),
+    tree: expose(TreeMutation, { ensureSource: Tree }),
   },
 });
 

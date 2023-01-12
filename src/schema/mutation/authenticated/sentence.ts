@@ -38,7 +38,7 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         const parentSentence = await ensureModelExistence(parentSentenceId, Sentence);
         const sentence = await Sentence.create({
           ownerId: currentUser.id,
-          storyId: parentSentence.storyId,
+          treeId: parentSentence.treeId,
           parentSentenceId,
           text,
         });

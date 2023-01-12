@@ -28,8 +28,8 @@ export const UserRestricted = new GraphQLObjectType({
   }),
 });
 
-export const StoryType = new GraphQLObjectType({
-  name: 'Story',
+export const TreeType = new GraphQLObjectType({
+  name: 'Tree',
   fields: () => ({
     id: { type: GraphQLInt },
     open: { type: GraphQLBoolean },

@@ -1,4 +1,4 @@
-import type { Completion, Story, User } from 'definitions/models';
+import type { Completion, Tree, User } from 'definitions/models';
 
 import {
   DataTypes,
@@ -15,7 +15,7 @@ import sequelize from 'core/sequelize';
 class Sentence extends Model<InferAttributes<Sentence>, InferCreationAttributes<Sentence>> {
   declare id: CreationOptional<number>;
   declare ownerId: ForeignKey<number>;
-  declare storyId: ForeignKey<number>;
+  declare treeId: ForeignKey<number>;
   declare parentSentenceId: CreationOptional<ForeignKey<number>>;
   declare text: string;
   declare theEnd: CreationOptional<boolean>;
@@ -23,13 +23,13 @@ class Sentence extends Model<InferAttributes<Sentence>, InferCreationAttributes<
   declare updatedAt: CreationOptional<Date>;
 
   declare owner?: NonAttribute<User>;
-  declare story?: NonAttribute<Story>;
+  declare tree?: NonAttribute<Tree>;
   declare parentSentence?: NonAttribute<Sentence>;
   declare sentences?: NonAttribute<Sentence[]>;
   declare completions?: NonAttribute<Completion[]>;
   declare static associations: {
     owner: Association<Sentence, User>;
-    story: Association<Sentence, Story>;
+    tree: Association<Sentence, Tree>;
     parentSentence: Association<Sentence, Sentence>;
     sentences: Association<Sentence, Sentence>;
     completions: Association<Sentence, Completion>;
@@ -39,7 +39,7 @@ class Sentence extends Model<InferAttributes<Sentence>, InferCreationAttributes<
 Sentence.init({
   id: { type: DataTypes.INTEGER, allowNull: false, autoIncrement: true, primaryKey: true },
   ownerId: { type: DataTypes.INTEGER, allowNull: false },
-  storyId: { type: DataTypes.INTEGER, allowNull: false },
+  treeId: { type: DataTypes.INTEGER, allowNull: false },
   parentSentenceId: { type: DataTypes.INTEGER, allowNull: true },
   text: { type: DataTypes.TEXT, allowNull: false },
   theEnd: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
