@@ -22,7 +22,9 @@ const AccountMutation = new GraphQLObjectType({
       },
       resolve: async (parent, args, ctx) => {
         const { password, ...userArgs } = args;
-        const { email } = args;
+        const { username, email } = userArgs;
+        if (await User.count({ where: { username } }) > 0)
+          throw new Error('Username already taken');
         if (await User.count({ where: { email } }) > 0)
           throw new Error('Email already taken');
         const hashedPassword = await bcrypt.hash(password, 10);
