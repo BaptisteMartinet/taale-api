@@ -19,7 +19,6 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare email: string;
   declare password: string;
   declare role: CreationOptional<Role>;
-
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
@@ -46,6 +45,7 @@ User.init({
 }, {
   tableName: 'users',
   timestamps: true,
+  indexes: [{ fields: ['email', 'username'], unique: true }],
   sequelize,
 });
 
