@@ -45,7 +45,10 @@ User.init({
 }, {
   tableName: 'users',
   timestamps: true,
-  indexes: [{ fields: ['email', 'username'], unique: true }],
+  indexes: [
+    { fields: ['email'], unique: true },
+    { fields: ['username'], unique: true },
+  ],
   sequelize,
 });
 
