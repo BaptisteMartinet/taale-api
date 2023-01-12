@@ -26,7 +26,10 @@ const AuthenticatedQuery = new GraphQLObjectType<unknown, Context>({
     partialStory: {
       type: new GraphQLList(SentenceType),
       resolve: async () => {
-        const randomSentence = await Sentence.findOne({ order: sequelize.random() });
+        const randomSentence = await Sentence.findOne({
+          where: { theEnd: false },
+          order: sequelize.random(),
+        });
         if (!randomSentence)
           throw new Error('Unable to fetch random sentence within the tree');
         const sentences: Array<Sentence> = [ randomSentence ];
