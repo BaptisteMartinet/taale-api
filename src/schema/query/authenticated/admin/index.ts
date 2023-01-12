@@ -12,7 +12,7 @@ const AdminQuery = new GraphQLObjectType<unknown, Context>({
       resolve: () => User.findAll(),
     },
 
-    stories: {
+    trees: {
       type: new GraphQLList(TreeType),
       resolve: () => Tree.findAll({ include: [ Tree.associations.owner, Tree.associations.sentences ] }),
     },
