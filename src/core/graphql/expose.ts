@@ -4,6 +4,7 @@ import type { Context } from 'core/context';
 
 import { GraphQLInt } from 'graphql';
 import { ensureModelExistence } from 'core/sequelize';
+import { ClientError, ClientErrorT } from 'core/errors';
 import { User } from 'definitions/models';
 import { Role } from 'definitions/enums';
 
@@ -26,9 +27,9 @@ function expose(type: GraphQLOutputType, opts: ExposeOptions = {}): GraphQLField
       if (ensureAuth && !currentUser && currentUserId)
         ctx.currentUser = await ensureModelExistence(currentUserId, User);
       if (ensureAuth && !ctx.currentUser)
-        throw new Error('User must be authenticated');
+        throw new ClientError('User must be authenticated', ClientErrorT.InsufficientPermission);
       if (ensureAdmin && ctx.currentUser?.role !== Role.Admin)
-        throw new Error('User must be admin');
+        throw new ClientError('User must be admin', ClientErrorT.InsufficientPermission);
       if (ensureSource && id)
         return ensureModelExistence(id, ensureSource);
       return {};
