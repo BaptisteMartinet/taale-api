@@ -1,3 +1,5 @@
+import type { User, Sentence } from 'definitions/models';
+
 import {
   DataTypes,
   Model,
@@ -9,7 +11,6 @@ import {
   ForeignKey,
 } from 'sequelize';
 import sequelize from 'core/sequelize';
-import type { User, Sentence } from 'definitions/models';
 import { Locale } from 'definitions/enums';
 
 class Tree extends Model<InferAttributes<Tree>, InferCreationAttributes<Tree>> {
