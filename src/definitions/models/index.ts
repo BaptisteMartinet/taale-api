@@ -15,6 +15,11 @@ Tree.hasMany(Sentence, {
   foreignKey: 'treeId',
   as: 'sentences',
 });
+Tree.hasMany(Story, {
+  sourceKey: 'id',
+  foreignKey: 'treeId',
+  as: 'stories',
+});
 
 User.hasMany(Tree, {
   sourceKey: 'id',
@@ -89,6 +94,11 @@ Story.belongsTo(Sentence, {
   foreignKey: 'sentenceId',
   targetKey: 'id',
   as: 'sentence',
+});
+Story.belongsTo(Tree, {
+  foreignKey: 'treeId',
+  targetKey: 'id',
+  as: 'tree',
 });
 
 export {
