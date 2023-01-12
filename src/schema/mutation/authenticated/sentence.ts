@@ -6,11 +6,10 @@ import {
   GraphQLObjectType,
   GraphQLString,
 } from 'graphql';
-import { Op } from 'sequelize';
 import { nbCompletionsToMarkComplete } from 'core/constants';
 import { Context } from 'core/context';
 import { Minute } from 'core/utils/time';
-import ensureModelExistence from 'core/sequelize/ensureModelExistence';
+import { ensureNotSpam, ensureModelExistence } from 'core/sequelize';
 import { Sentence, Report, Completion } from 'definitions/models';
 import { SentenceType } from 'schema/output-types';
 
@@ -27,14 +26,11 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         const { parentSentenceId, text } = args;
         const { currentUser } = ctx;
         assert(currentUser);
-        const nbSentencesInLast5Mins = await Sentence.count({
-          where: {
-            ownerId: currentUser.id,
-            createdAt: { [Op.gte]: (Date.now() - (Minute * 5)) },
-          },
+        await ensureNotSpam(Sentence, {
+          userId: currentUser.id,
+          timeFrameMs: 5 * Minute,
+          recordsLimit: 3,
         });
-        if (nbSentencesInLast5Mins >= 3)
-          throw new Error('Spam detected');
         const parentSentence = await ensureModelExistence(parentSentenceId, Sentence);
         const sentence = await Sentence.create({
           ownerId: currentUser.id,
@@ -55,6 +51,15 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         assert(currentUser);
         if (!(source instanceof Sentence))
           return false;
+        if (source.parentSentenceId === null)
+          return false;
+        if (source.theEnd === true)
+          return false;
+        await ensureNotSpam(Report, {
+          userId: currentUser.id,
+          timeFrameMs: 5 * Minute,
+          recordsLimit: 3,
+        });
         await Report.create({
           ownerId: currentUser.id,
           resourceType: Sentence.name,
