@@ -10,8 +10,22 @@ import { nbCompletionsToMarkComplete } from 'core/constants';
 import { Context } from 'core/context';
 import { Minute } from 'core/utils/time';
 import { ensureNotSpam, ensureModelExistence } from 'core/sequelize';
-import { Sentence, Report, Completion } from 'definitions/models';
+import { Sentence, Report, Completion, Story } from 'definitions/models';
 import { SentenceType } from 'schema/output-types';
+
+async function checkCompletion(sentence: Sentence) {
+  const completionCount = await Completion.count({
+    where: { sentenceId: sentence.id },
+  });
+  if (completionCount < nbCompletionsToMarkComplete)
+    return;
+  await sentence.update({ theEnd: true });
+  await Story.create({
+    title: 'The title', // TODO define story title: admin?, first/last sentence?
+    sentenceId: sentence.id,
+    treeId: sentence.treeId,
+  });
+}
 
 const SentenceMutation = new GraphQLObjectType<unknown, Context>({
   name: 'SentenceMutation',
@@ -79,15 +93,16 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
           return false;
         if (source.theEnd === true)
           return false;
+        await ensureNotSpam(Completion, {
+          userId: currentUser.id,
+          timeFrameMs: 5 * Minute,
+          recordsLimit: 3,
+        });
         await Completion.create({
           ownerId: currentUser.id,
           sentenceId: source.id,
         });
-        const completionCount = await Completion.count({
-          where: { sentenceId: source.id },
-        });
-        if (completionCount >= nbCompletionsToMarkComplete)
-          await source.update({ theEnd: true });
+        await checkCompletion(source);
         return true;
       },
     },
