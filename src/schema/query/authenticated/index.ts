@@ -25,8 +25,14 @@ const AuthenticatedQuery = new GraphQLObjectType<unknown, Context>({
 
     partialStory: {
       type: new GraphQLList(SentenceType),
-      resolve: async () => {
+      resolve: async (source, args, ctx) => {
+        const { locale } = ctx;
         const randomSentence = await Sentence.findOne({
+          include: {
+            association: Sentence.associations.tree,
+            required: true,
+            where: { locale },
+          },
           where: { theEnd: false },
           order: sequelize.random(),
         });
