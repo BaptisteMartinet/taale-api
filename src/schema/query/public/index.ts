@@ -1,6 +1,6 @@
 import type { Context } from 'core/context';
 
-import { GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType } from 'graphql';
+import { GraphQLInt, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { startOfDay } from 'date-fns';
 import { Day } from 'core/utils/time';
 import sequelize, { ensureModelExistence } from 'core/sequelize';
@@ -10,12 +10,6 @@ import { StoryType } from 'schema/output-types';
 const PublicQuery = new GraphQLObjectType<unknown, Context>({
   name: 'PublicQuery',
   fields: {
-    // TODO filtrer par locale et paginer ?
-    stories: {
-      type: new GraphQLList(StoryType),
-      resolve: () => Story.findAll(),
-    },
-
     story: {
       type: StoryType,
       args: {
