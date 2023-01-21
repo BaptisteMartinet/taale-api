@@ -37,7 +37,7 @@ const AuthenticatedQuery = new GraphQLObjectType<unknown, Context>({
           order: sequelize.random(),
         });
         if (!randomSentence)
-          throw new Error('Unable to fetch random sentence within the tree');
+          throw new Error('Unable to fetch random sentence within the trees');
         const sentences: Array<Sentence> = [ randomSentence ];
         while (sentences.length < PartialStoryNbSentences) {
           const lastSentence = sentences[sentences.length - 1];
