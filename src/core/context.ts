@@ -1,17 +1,21 @@
 import type { ContextFunction, BaseContext } from '@apollo/server';
 import type { StandaloneServerContextFunctionArgument } from '@apollo/server/standalone';
 import type { User } from 'definitions/models';
+import type { Locale } from 'definitions/enums';
 
 import * as jwt from 'jsonwebtoken';
 import env from 'core/env';
+import { strToLocale } from 'definitions/helpers';
 
 export interface Context extends BaseContext {
   currentUserId?: number;
   currentUser?: User;
+  locale: Locale;
 }
 
 const context: ContextFunction<[StandaloneServerContextFunctionArgument], Context> = async ({ req, res }) => {
-  const ctx: Context = {};
+  const locale = strToLocale(req.headers['content-language']);
+  const ctx: Context = { locale };
   const authHeader = req.headers.authorization;
   if (!authHeader)
     return ctx;

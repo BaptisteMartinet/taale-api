@@ -1,12 +1,13 @@
+import type { Context } from 'core/context';
+
 import { GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { startOfDay } from 'date-fns';
 import { Day } from 'core/utils/time';
 import sequelize, { ensureModelExistence } from 'core/sequelize';
 import { Story } from 'definitions/models';
-import { LocaleEnum } from 'definitions/enums';
 import { StoryType } from 'schema/output-types';
 
-const PublicQuery = new GraphQLObjectType({
+const PublicQuery = new GraphQLObjectType<unknown, Context>({
   name: 'PublicQuery',
   fields: {
     // TODO filtrer par locale et paginer ?
@@ -29,12 +30,9 @@ const PublicQuery = new GraphQLObjectType({
 
     storyOfTheDay: {
       type: StoryType,
-      args: {
-        locale: { type: new GraphQLNonNull(LocaleEnum) },
-      },
       description: 'TODO, currently not working due to postgreSQL nor supporting "random(seed);"',
       resolve: (source, args, ctx) => {
-        const { locale } = args;
+        const { locale } = ctx;
         const randomSeed = Math.floor(Date.now() / Day);
         return Story.findOne({
           include: {
