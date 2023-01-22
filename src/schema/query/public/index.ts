@@ -24,7 +24,6 @@ const PublicQuery = new GraphQLObjectType<unknown, Context>({
 
     storyOfTheDay: {
       type: StoryType,
-      description: 'TODO, currently not working due to postgreSQL nor supporting "random(seed);"',
       resolve: (source, args, ctx) => {
         const { locale } = ctx;
         const randomSeed = Math.floor(Date.now() / Day);
@@ -40,7 +39,7 @@ const PublicQuery = new GraphQLObjectType<unknown, Context>({
           where: {
             createdAt: { $lt: startOfDay(Date.now()) },
           },
-          order: sequelize.fn('random', randomSeed),
+          order: sequelize.fn('RAND', randomSeed),
         });
       },
     },
