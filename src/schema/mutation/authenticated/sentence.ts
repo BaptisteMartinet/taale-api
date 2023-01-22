@@ -7,7 +7,6 @@ import {
   GraphQLString,
 } from 'graphql';
 import { Minute } from 'core/utils/time';
-import { ClientError, ClientErrorT } from 'core/errors';
 import { ensureNotSpam, ensureModelExistence } from 'core/sequelize';
 import { Context } from 'core/context';
 import { Sentence, Report, Completion } from 'definitions/models';
@@ -52,9 +51,9 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         assert(currentUser);
         assert(source instanceof Sentence);
         if (source.parentSentenceId === null)
-          return false;
+          throw new Error('Cannot report initial sentence');
         if (source.theEnd === true)
-          return false;
+          throw new Error('Cannot report ended sentence');
         await ensureNotSpam(Report, {
           userId: currentUser.id,
           timeFrameMs: 5 * Minute,
@@ -77,7 +76,7 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         assert(currentUser);
         assert(source instanceof Sentence);
         if (source.theEnd === true)
-          throw new ClientError('Sentence already marked as completed', ClientErrorT.InsufficientPermission);
+          throw new Error('Sentence already marked as completed');
         await ensureNotSpam(Completion, {
           userId: currentUser.id,
           timeFrameMs: 5 * Minute,
