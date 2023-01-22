@@ -6,26 +6,13 @@ import {
   GraphQLObjectType,
   GraphQLString,
 } from 'graphql';
-import { nbCompletionsToMarkComplete } from 'core/constants';
-import { Context } from 'core/context';
 import { Minute } from 'core/utils/time';
+import { ClientError, ClientErrorT } from 'core/errors';
 import { ensureNotSpam, ensureModelExistence } from 'core/sequelize';
-import { Sentence, Report, Completion, Story } from 'definitions/models';
+import { Context } from 'core/context';
+import { Sentence, Report, Completion } from 'definitions/models';
+import { checkCompletion } from 'definitions/helpers';
 import { SentenceType } from 'schema/output-types';
-
-async function checkCompletion(sentence: Sentence) {
-  const completionCount = await Completion.count({
-    where: { sentenceId: sentence.id },
-  });
-  if (completionCount < nbCompletionsToMarkComplete)
-    return;
-  await sentence.update({ theEnd: true });
-  await Story.create({
-    title: 'The title', // TODO define story title: admin?, first/last sentence?
-    sentenceId: sentence.id,
-    treeId: sentence.treeId,
-  });
-}
 
 const SentenceMutation = new GraphQLObjectType<unknown, Context>({
   name: 'SentenceMutation',
@@ -49,7 +36,7 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         const sentence = await Sentence.create({
           ownerId: currentUser.id,
           treeId: parentSentence.treeId,
-          parentSentenceId,
+          parentSentenceId: parentSentence.id,
           text,
         });
         return sentence;
@@ -90,7 +77,7 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         assert(currentUser);
         assert(source instanceof Sentence);
         if (source.theEnd === true)
-          return false;
+          throw new ClientError('Sentence already marked as completed', ClientErrorT.InsufficientPermission);
         await ensureNotSpam(Completion, {
           userId: currentUser.id,
           timeFrameMs: 5 * Minute,
