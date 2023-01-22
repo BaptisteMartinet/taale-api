@@ -6,9 +6,7 @@ async function ascendSentencesIds(sentence: Sentence): Promise<Array<number>> {
   const ids: Array<number> = [sentence.id];
   const limit = 1000; // TODO unhardcode this
   let lastSentenceParentId: number | null = sentence.parentSentenceId;
-  for (let i = 0; i < limit; ++i) {
-    if (!lastSentenceParentId)
-      break;
+  for (let i = 0; i < limit && lastSentenceParentId !== null; ++i) {
     const parentSentence: Sentence = await ensureModelExistence(lastSentenceParentId, Sentence);
     ids.push(parentSentence.id);
     lastSentenceParentId = parentSentence.parentSentenceId;
