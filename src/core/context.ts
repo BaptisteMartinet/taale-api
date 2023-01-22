@@ -24,7 +24,7 @@ const context: ContextFunction<[StandaloneServerContextFunctionArgument], Contex
     return ctx;
   try {
     const payload = jwt.verify(token, env.JWT_SECRET_KEY) as jwt.JwtPayload;
-    Object.assign(ctx, { currentUserId: payload.userId });
+    ctx.currentUserId = payload.userId;
   } catch (error) {
     console.error(error);
   }
