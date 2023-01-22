@@ -21,8 +21,7 @@
     "dotenv": "^16.0.3",
     "graphql": "^16.6.0",
     "jsonwebtoken": "^8.5.1",
-    "pg": "^8.8.0",
-    "pg-hstore": "^2.3.4",
+    "mariadb": "^3.0.2",
     "sequelize": "^6.27.0",
     "tsconfig-paths": "^4.1.1"
   },
