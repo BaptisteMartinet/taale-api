@@ -1,11 +1,12 @@
 import assert from 'assert';
 import { GraphQLList, GraphQLObjectType } from 'graphql';
+import { Op } from 'sequelize';
 import { PartialStoryNbSentences } from 'core/constants';
 import sequelize from 'core/sequelize';
-import ensureModelExistence from 'core/sequelize/ensureModelExistence';
 import { expose } from 'core/graphql';
 import { Context } from 'core/context';
 import { Sentence } from 'definitions/models';
+import { ascendSentencesIdsWithLimit } from 'definitions/helpers';
 import { SentenceType, UserType } from 'schema/output-types';
 import AdminQuery from './admin';
 
@@ -38,16 +39,8 @@ const AuthenticatedQuery = new GraphQLObjectType<unknown, Context>({
         });
         if (!randomSentence)
           throw new Error('Unable to fetch random sentence within the trees');
-        const sentences: Array<Sentence> = [ randomSentence ];
-        while (sentences.length < PartialStoryNbSentences) {
-          const lastSentence = sentences[sentences.length - 1];
-          const { parentSentenceId } = lastSentence;
-          if (!parentSentenceId)
-            break;
-          const parentSentence = await ensureModelExistence(parentSentenceId, Sentence);
-          sentences.push(parentSentence);
-        }
-        return sentences;
+        const sentencesIds = await ascendSentencesIdsWithLimit(randomSentence.id, PartialStoryNbSentences);
+        return Sentence.findAll({ where: { id: { [Op.in]: sentencesIds }}});
       },
     },
   },
