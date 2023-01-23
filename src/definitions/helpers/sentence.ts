@@ -17,7 +17,7 @@ export async function ascendSentencesIds(sentenceId: number): Promise<number[]> 
 export async function ascendSentencesIdsWithLimit(sentenceId: number, limit: number): Promise<number[]> {
   const records = await sequelize.query<{ id: number, parentSentenceId: number }>(`
   with recursive cte as (
-    SELECT id, parentSentenceId, 0 as idx FROM sentences WHERE id=${sentenceId}
+    SELECT id, parentSentenceId, 1 as idx FROM sentences WHERE id=${sentenceId}
     UNION ALL
     SELECT s.id, s.parentSentenceId, idx + 1 FROM cte
     JOIN sentences s ON cte.parentSentenceId=s.id
