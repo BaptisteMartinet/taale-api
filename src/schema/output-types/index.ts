@@ -55,7 +55,6 @@ export const StoryType = new GraphQLObjectType({
   name: 'Story',
   fields: () => ({
     id: { type: GraphQLInt },
-    title: { type: GraphQLString },
     createdAt: { type: GraphQLDate },
     updatedAt: { type: GraphQLDate },
   }),
