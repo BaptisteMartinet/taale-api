@@ -29,14 +29,20 @@ const PublicQuery = new GraphQLObjectType<unknown, Context>({
         const { locale } = ctx;
         const randomSeed = Math.floor(Date.now() / Day);
         return Story.findOne({
-          include: {
-            association: Story.associations.tree,
-            required: true,
-            where: {
-              open: true,
-              locale,
+          include: [
+            {
+              association: Story.associations.tree,
+              required: true,
+              where: {
+                open: true,
+                locale,
+              },
             },
-          },
+            {
+              association: Story.associations.sentencesLinks,
+              required: true,
+            },
+          ],
           where: {
             createdAt: { [Op.lt]: startOfDay(Date.now()) },
           },

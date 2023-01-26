@@ -5,7 +5,10 @@ import {
   GraphQLObjectType,
   GraphQLString,
 } from 'graphql';
+import { Op } from 'sequelize';
 import { GraphQLDate } from 'core/graphql/scalars';
+import { Context } from 'core/context';
+import { Sentence, Story } from 'definitions/models';
 import { RoleEnum, LocaleEnum } from 'definitions/enums';
 
 export const UserType = new GraphQLObjectType({
@@ -51,10 +54,20 @@ export const SentenceType = new GraphQLObjectType({
   }),
 });
 
-export const StoryType = new GraphQLObjectType({
+export const StoryType = new GraphQLObjectType<Story, Context>({
   name: 'Story',
   fields: () => ({
     id: { type: GraphQLInt },
+    sentences: {
+      type: new GraphQLList(SentenceType),
+      resolve: (story) => {
+        const sentencesIds = story.sentencesLinks?.map(link => link.sentenceId);
+        console.log(sentencesIds);
+        if (!sentencesIds)
+          return [];
+        return Sentence.findAll({ where: { id: { [Op.in]: sentencesIds } } });
+      },
+    },
     createdAt: { type: GraphQLDate },
     updatedAt: { type: GraphQLDate },
   }),
