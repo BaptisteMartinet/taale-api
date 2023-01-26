@@ -1,3 +1,4 @@
+import assert from 'assert';
 import {
   GraphQLBoolean,
   GraphQLInt,
@@ -49,6 +50,7 @@ export const SentenceType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLInt },
     text: { type: GraphQLString },
+    owner: { type: UserRestrictedType },
     createdAt: { type: GraphQLDate },
     updatedAt: { type: GraphQLDate },
   }),
@@ -62,10 +64,11 @@ export const StoryType = new GraphQLObjectType<Story, Context>({
       type: new GraphQLList(SentenceType),
       resolve: (story) => {
         const sentencesIds = story.sentencesLinks?.map(link => link.sentenceId);
-        console.log(sentencesIds);
-        if (!sentencesIds)
-          return [];
-        return Sentence.findAll({ where: { id: { [Op.in]: sentencesIds } } });
+        assert(sentencesIds);
+        return Sentence.findAll({
+          where: { id: { [Op.in]: sentencesIds }},
+          include: { association: Sentence.associations.owner, required: true },
+        });
       },
     },
     createdAt: { type: GraphQLDate },
