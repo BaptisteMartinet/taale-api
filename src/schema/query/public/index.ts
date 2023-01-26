@@ -1,6 +1,7 @@
 import type { Context } from 'core/context';
 
 import { GraphQLInt, GraphQLNonNull, GraphQLObjectType } from 'graphql';
+import { Op } from 'sequelize';
 import { startOfDay } from 'date-fns';
 import { Day } from 'core/utils/time';
 import sequelize, { ensureModelExistence } from 'core/sequelize';
@@ -37,7 +38,7 @@ const PublicQuery = new GraphQLObjectType<unknown, Context>({
             },
           },
           where: {
-            createdAt: { $lt: startOfDay(Date.now()) },
+            createdAt: { [Op.lt]: startOfDay(Date.now()) },
           },
           order: sequelize.fn('RAND', randomSeed),
         });
