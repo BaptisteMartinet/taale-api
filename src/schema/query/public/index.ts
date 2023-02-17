@@ -23,7 +23,7 @@ const PublicQuery = new GraphQLObjectType<unknown, Context>({
       },
     },
 
-    storyOfTheDay: {
+    dailyStory: {
       type: StoryType,
       resolve: (source, args, ctx) => {
         const { locale } = ctx;
