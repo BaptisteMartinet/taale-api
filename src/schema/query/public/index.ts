@@ -1,6 +1,6 @@
 import type { Context } from 'core/context';
 
-import { GraphQLBoolean, GraphQLInt, GraphQLNonNull, GraphQLObjectType } from 'graphql';
+import { GraphQLInt, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { Op } from 'sequelize';
 import { startOfDay } from 'date-fns';
 import { Day } from 'core/utils/time';
@@ -48,13 +48,6 @@ const PublicQuery = new GraphQLObjectType<unknown, Context>({
           },
           order: sequelize.fn('RAND', randomSeed),
         });
-      },
-    },
-
-    availableRdvPermisSlot: {
-      type: GraphQLBoolean,
-      resolve: () => {
-        return true; // TODO
       },
     },
   },
