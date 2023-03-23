@@ -5,12 +5,16 @@ import { Op } from 'sequelize';
 import { startOfDay } from 'date-fns';
 import { Day } from 'core/utils/time';
 import sequelize, { ensureModelExistence } from 'core/sequelize';
+import { expose } from 'core/graphql';
 import { Story } from 'definitions/models';
 import { StoryType } from 'schema/output-types';
+import StatisticsQuery from './statistics';
 
 const PublicQuery = new GraphQLObjectType<unknown, Context>({
   name: 'PublicQuery',
   fields: {
+    statistics: expose(StatisticsQuery),
+
     story: {
       type: StoryType,
       args: {
