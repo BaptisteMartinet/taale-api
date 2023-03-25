@@ -42,10 +42,6 @@ const PublicQuery = new GraphQLObjectType<unknown, Context>({
                 locale,
               },
             },
-            {
-              association: Story.associations.sentencesLinks,
-              required: true,
-            },
           ],
           where: {
             createdAt: { [Op.lt]: startOfDay(Date.now()) },

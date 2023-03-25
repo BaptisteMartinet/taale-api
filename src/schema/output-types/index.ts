@@ -1,4 +1,3 @@
-import assert from 'assert';
 import {
   GraphQLBoolean,
   GraphQLInt,
@@ -9,7 +8,7 @@ import {
 import { Op } from 'sequelize';
 import { GraphQLDate } from 'core/graphql/scalars';
 import { Context } from 'core/context';
-import { Sentence, Story } from 'definitions/models';
+import { Sentence, Story, StorySentenceLink } from 'definitions/models';
 import { RoleEnum, LocaleEnum } from 'definitions/enums';
 
 export const UserType = new GraphQLObjectType({
@@ -62,9 +61,12 @@ export const StoryType = new GraphQLObjectType<Story, Context>({
     id: { type: GraphQLInt },
     sentences: {
       type: new GraphQLList(SentenceType),
-      resolve: (story) => {
-        const sentencesIds = story.sentencesLinks?.map(link => link.sentenceId);
-        assert(sentencesIds);
+      resolve: async (story) => {
+        const sentencesLinks = await StorySentenceLink.findAll({
+          where: { storyId: story.id },
+          attributes: ['sentenceId'],
+        });
+        const sentencesIds = sentencesLinks.map(link => link.sentenceId);
         return Sentence.findAll({
           where: { id: { [Op.in]: sentencesIds }},
           include: { association: Sentence.associations.owner, required: true },
