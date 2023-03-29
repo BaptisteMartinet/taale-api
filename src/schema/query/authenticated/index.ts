@@ -5,9 +5,9 @@ import { PartialStoryNbSentences } from 'core/constants';
 import sequelize from 'core/sequelize';
 import { expose } from 'core/graphql';
 import { Context } from 'core/context';
-import { Sentence } from 'definitions/models';
+import { Sentence, Story, StorySentenceLink } from 'definitions/models';
 import { ascendSentencesIdsWithLimit } from 'definitions/helpers';
-import { SentenceType, UserType } from 'schema/output-types';
+import { SentenceType, UserType, StoryType } from 'schema/output-types';
 import AdminQuery from './admin';
 
 const AuthenticatedQuery = new GraphQLObjectType<unknown, Context>({
@@ -46,6 +46,27 @@ const AuthenticatedQuery = new GraphQLObjectType<unknown, Context>({
             association: Sentence.associations.owner,
             required: true,
           },
+        });
+      },
+    },
+
+    myStories: {
+      type: new GraphQLList(StoryType),
+      resolve(source, args, ctx) {
+        const { currentUser } = ctx;
+        assert(currentUser);
+        return Story.findAll({
+          include: [{
+            model: StorySentenceLink,
+            as: 'sentencesLinks',
+            required: true,
+            include: [{
+              model: Sentence,
+              as: 'sentence',
+              where: { ownerId: currentUser.id },
+              required: true,
+            }],
+          }],
         });
       },
     },
