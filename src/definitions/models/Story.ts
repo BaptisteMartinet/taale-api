@@ -25,7 +25,7 @@ class Story extends Model<InferAttributes<Story>, InferCreationAttributes<Story>
   declare static associations: {
     sentence: Association<Story, Sentence>;
     tree: Association<Story, Tree>;
-    sentencesLinks: Association<Story, Sentence>;
+    sentencesLinks: Association<Story, StorySentenceLink>;
   };
 }
 
