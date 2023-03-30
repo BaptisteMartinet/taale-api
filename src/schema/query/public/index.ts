@@ -3,7 +3,7 @@ import type { Context } from 'core/context';
 import { GraphQLInt, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { Op } from 'sequelize';
 import { startOfDay } from 'date-fns';
-import { Day } from 'core/utils/time';
+import { Day } from 'lib/utils';
 import sequelize, { ensureModelExistence } from 'core/sequelize';
 import { expose } from 'core/graphql';
 import { Story } from 'definitions/models';

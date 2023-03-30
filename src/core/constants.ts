@@ -1,4 +1,4 @@
-import { Minute } from 'core/utils/time';
+import { Minute } from 'lib/utils';
 import { Locale } from 'definitions/enums';
 
 export const DefaultLocale = Locale.EN;
