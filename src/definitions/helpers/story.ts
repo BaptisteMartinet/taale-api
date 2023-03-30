@@ -5,6 +5,7 @@ import { ascendSentencesIds } from './sentence';
 async function genStoryTitle(sentencesIds: number[]) {
   const sentences = await Sentence.findAll({
     where: { id: { [Op.in]: sentencesIds } },
+    attributes: ['text'],
     limit: sentencesIds.length,
   });
   return sentences.map(sentence => sentence.text).join(' ');
