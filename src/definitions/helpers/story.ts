@@ -2,12 +2,7 @@ import { Op } from 'sequelize';
 import { Story, StorySentenceLink, Sentence } from 'definitions/models';
 import { ascendSentencesIds } from './sentence';
 
-/**
- * 
- * @param sentencesIds 
- * @returns Concatenation of all Sentence texts
- */
-export async function genStoryTitle(sentencesIds: number[]) {
+async function genStoryTitle(sentencesIds: number[]) {
   const sentences = await Sentence.findAll({
     where: { id: { [Op.in]: sentencesIds } },
     limit: sentencesIds.length,
