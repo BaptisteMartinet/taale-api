@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType } from 'graphql';
+import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
 import { Context } from 'core/context';
 import { Sentence, Tree } from 'definitions/models';
 import { LocaleEnum } from 'definitions/enums';
@@ -12,15 +12,17 @@ const TreeMutation = new GraphQLObjectType<unknown, Context>({
     create: {
       type: TreeType,
       args: {
+        name: { type: new GraphQLNonNull(GraphQLString) },
         open: { type: new GraphQLNonNull(GraphQLBoolean) },
         locale: { type: new GraphQLNonNull(LocaleEnum) },
       },
       resolve: async (source, args, ctx) => {
-        const { open, locale } = args;
+        const { name, open, locale } = args;
         const { currentUser } = ctx;
         assert(currentUser);
         const tree = await Tree.create({
           ownerId: currentUser.id,
+          name,
           open,
           locale,
         });

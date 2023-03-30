@@ -16,6 +16,7 @@ import { Locale } from 'definitions/enums';
 class Tree extends Model<InferAttributes<Tree>, InferCreationAttributes<Tree>> {
   declare id: CreationOptional<number>;
   declare ownerId: ForeignKey<number>;
+  declare name: string;
   declare open: boolean;
   declare locale: Locale;
   declare createdAt: CreationOptional<Date>;
@@ -34,6 +35,7 @@ class Tree extends Model<InferAttributes<Tree>, InferCreationAttributes<Tree>> {
 Tree.init({
   id: { type: DataTypes.INTEGER, allowNull: false, autoIncrement: true, primaryKey: true },
   ownerId: { type: DataTypes.INTEGER, allowNull: false },
+  name: { type: DataTypes.STRING, allowNull: false },
   open: { type: DataTypes.BOOLEAN, allowNull: false },
   locale: { type: DataTypes.ENUM, allowNull: false, values: Object.values(Locale) },
   createdAt: DataTypes.DATE,
