@@ -5,6 +5,7 @@ export const DefaultLocale = Locale.EN;
 
 export const UsernameMinLength = 2;
 export const UsernameMaxLength = 20;
+export const UsernameValidationRegex = new RegExp(`^[\\w\\.]{${UsernameMinLength},${UsernameMaxLength}}$`);
 export const PasswordMinLength = 4;
 
 export const NbReportsToDeleteSentence = 3;
