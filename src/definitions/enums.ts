@@ -1,5 +1,5 @@
 import { GraphQLEnumType } from 'graphql';
-import buildEnumValues from 'core/graphql/buildEnumValues';
+import { buildEnumValues } from 'lib/graphql';
 
 export enum Role {
   Default = 'Default',

@@ -14,7 +14,7 @@ export interface ExposeOptions {
   ensureSource?: ModelStatic<Model>;
 }
 
-function expose(type: GraphQLOutputType, opts: ExposeOptions = {}): GraphQLFieldConfig<unknown, Context> {
+export default function expose(type: GraphQLOutputType, opts: ExposeOptions = {}): GraphQLFieldConfig<unknown, Context> {
   const { ensureAuth, ensureAdmin, ensureSource } = opts;
   return {
     type,
@@ -36,5 +36,3 @@ function expose(type: GraphQLOutputType, opts: ExposeOptions = {}): GraphQLField
     },
   };
 }
-
-export default expose;

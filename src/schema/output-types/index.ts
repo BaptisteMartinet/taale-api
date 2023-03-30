@@ -6,7 +6,7 @@ import {
   GraphQLString,
 } from 'graphql';
 import { Op } from 'sequelize';
-import { GraphQLDate } from 'core/graphql/scalars';
+import { GraphQLDate } from 'lib/graphql';
 import { Context } from 'core/context';
 import { Sentence, Story, StorySentenceLink } from 'definitions/models';
 import { RoleEnum, LocaleEnum } from 'definitions/enums';
