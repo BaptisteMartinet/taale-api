@@ -1,6 +1,6 @@
 import { Locale } from 'definitions/enums';
 
-export const PasswordMinLenght = 4;
+export const PasswordMinLength = 4;
 
 export const PartialStoryNbSentences = 10;
 

@@ -9,7 +9,7 @@ import {
   NonAttribute,
   Association,
 } from 'sequelize';
-import { PasswordMinLenght } from 'core/constants';
+import { PasswordMinLength } from 'core/constants';
 import sequelize from 'core/sequelize';
 import { Role } from 'definitions/enums';
 
@@ -38,7 +38,7 @@ User.init({
   id: { type: DataTypes.INTEGER, allowNull: false, autoIncrement: true, primaryKey: true },
   username: { type: DataTypes.STRING, allowNull: false },
   email: { type: DataTypes.STRING, allowNull: false, unique: true, validate: { isEmail: true } },
-  password: { type: DataTypes.STRING, allowNull: false, validate: { min: PasswordMinLenght } },
+  password: { type: DataTypes.STRING, allowNull: false, validate: { min: PasswordMinLength } },
   role: { type: DataTypes.ENUM, allowNull: false, values: Object.values(Role), defaultValue: Role.Default },
   createdAt: DataTypes.DATE,
   updatedAt: DataTypes.DATE,
