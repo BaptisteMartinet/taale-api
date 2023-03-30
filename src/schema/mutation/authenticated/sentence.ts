@@ -30,7 +30,7 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         const { currentUser } = ctx;
         assert(currentUser);
         await ensureNotSpam(Sentence, {
-          userId: currentUser.id,
+          user: currentUser,
           timeFrameMs: 5 * Minute,
           recordsLimit: 3,
         });
@@ -58,7 +58,7 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         if (sentence.theEnd === true)
           throw new Error('Cannot report ended sentence');
         await ensureNotSpam(Report, {
-          userId: currentUser.id,
+          user: currentUser,
           timeFrameMs: 5 * Minute,
           recordsLimit: 3,
         });
@@ -81,7 +81,7 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         if (sentence.theEnd === true)
           throw new Error('Sentence already marked as completed');
         await ensureNotSpam(Completion, {
-          userId: currentUser.id,
+          user: currentUser,
           timeFrameMs: 5 * Minute,
           recordsLimit: 3,
         });
