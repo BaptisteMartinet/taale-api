@@ -6,11 +6,18 @@ import {
   GraphQLObjectType,
   GraphQLString,
 } from 'graphql';
-import { Minute } from 'core/utils/time';
 import {
   ensureNotSpam,
   ensureModelExistence,
 } from 'core/sequelize';
+import {
+  SentenceCreationAntiSpamTimeFrameMs,
+  SentenceCreationAntiSpamRecordsLimit,
+  ReportAntiSpamTimeFrameMs,
+  ReportAntiSpamRecordsLimit,
+  CompletionAntiSpamTimeFrameMs,
+  CompletionAntiSpamRecordsLimit,
+} from 'core/constants';
 import { Context } from 'core/context';
 import { Sentence, Report, Completion } from 'definitions/models';
 import { checkCompletion, createStory } from 'definitions/helpers';
@@ -31,8 +38,8 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         assert(currentUser);
         await ensureNotSpam(Sentence, {
           user: currentUser,
-          timeFrameMs: 5 * Minute,
-          recordsLimit: 3,
+          timeFrameMs: SentenceCreationAntiSpamTimeFrameMs,
+          recordsLimit: SentenceCreationAntiSpamRecordsLimit,
         });
         const parentSentence = await ensureModelExistence<Sentence>(parentSentenceId, Sentence);
         const sentence = await Sentence.create({
@@ -59,8 +66,8 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
           throw new Error('Cannot report ended sentence');
         await ensureNotSpam(Report, {
           user: currentUser,
-          timeFrameMs: 5 * Minute,
-          recordsLimit: 3,
+          timeFrameMs: ReportAntiSpamTimeFrameMs,
+          recordsLimit: ReportAntiSpamRecordsLimit,
         });
         await Report.create({
           ownerId: currentUser.id,
@@ -82,8 +89,8 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
           throw new Error('Sentence already marked as completed');
         await ensureNotSpam(Completion, {
           user: currentUser,
-          timeFrameMs: 5 * Minute,
-          recordsLimit: 3,
+          timeFrameMs: CompletionAntiSpamTimeFrameMs,
+          recordsLimit: CompletionAntiSpamRecordsLimit,
         });
         await Completion.create({
           ownerId: currentUser.id,
