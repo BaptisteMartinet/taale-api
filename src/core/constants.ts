@@ -7,7 +7,7 @@ export const UsernameMinLength = 2;
 export const UsernameMaxLength = 20;
 export const PasswordMinLength = 4;
 
-export const NbReportsToDeleteResource = 3;
+export const NbReportsToDeleteSentence = 3;
 export const NbCompletionsToMarkComplete = 3;
 
 export const SentenceCreationAntiSpamTimeFrameMs = 5 * Minute;
