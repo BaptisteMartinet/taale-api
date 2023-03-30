@@ -1,5 +1,6 @@
 import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
-import { User } from 'definitions/models';
+import { ensureUsername } from 'definitions/helpers';
+
 const AccountQuery = new GraphQLObjectType({
   name: 'AccountQuery',
   fields: {
@@ -10,8 +11,8 @@ const AccountQuery = new GraphQLObjectType({
       },
       async resolve(_, args, ctx) {
         const { username } = args;
-        const userCount = await User.count({ where: { username } });
-        return (userCount === 0);
+        await ensureUsername(username);
+        return true;
       },
     },
   },
