@@ -25,5 +25,5 @@ export async function ascendSentencesIdsWithLimit(sentenceId: number, limit: num
   )
   select * from cte;
   `, { type: QueryTypes.SELECT });
-    return records.map(record => record.id);
+  return records.map(record => record.id);
 }
