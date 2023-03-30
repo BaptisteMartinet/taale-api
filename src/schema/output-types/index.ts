@@ -60,6 +60,7 @@ export const StoryType = new GraphQLObjectType<Story, Context>({
   name: 'Story',
   fields: () => ({
     id: { type: GraphQLInt },
+    title: { type: GraphQLString },
     sentences: {
       type: new GraphQLList(SentenceType),
       resolve: async (story) => {
