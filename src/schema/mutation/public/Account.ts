@@ -25,8 +25,8 @@ const AccountMutation = new GraphQLObjectType({
       resolve: async (parent, args, ctx) => {
         const { password, ...userArgs } = args;
         const { username, email } = userArgs;
-        ensureUsername(username);
-        ensureEmail(email);
+        await ensureUsername(username);
+        await ensureEmail(email);
         const hashedPassword = await bcrypt.hash(password, 10);
         await User.create({
           password: hashedPassword,
