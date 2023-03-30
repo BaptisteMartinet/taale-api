@@ -25,7 +25,7 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         parentSentenceId: { type: new GraphQLNonNull(GraphQLInt) },
         text: { type: new GraphQLNonNull(GraphQLString) },
       },
-      resolve: async (source, args, ctx) => {
+      resolve: async (_, args, ctx) => {
         const { parentSentenceId, text } = args;
         const { currentUser } = ctx;
         assert(currentUser);
@@ -49,13 +49,13 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
 
     report: {
       type: GraphQLBoolean,
-      resolve: async (source, args, ctx) => {
+      resolve: async (sentence, args, ctx) => {
         const { currentUser } = ctx;
         assert(currentUser);
-        assert(source instanceof Sentence);
-        if (source.parentSentenceId === null)
+        assert(sentence instanceof Sentence);
+        if (sentence.parentSentenceId === null)
           throw new Error('Cannot report initial sentence');
-        if (source.theEnd === true)
+        if (sentence.theEnd === true)
           throw new Error('Cannot report ended sentence');
         /*await ensureNotSpam(Report, {
           userId: currentUser.id,
@@ -65,7 +65,7 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         await Report.create({
           ownerId: currentUser.id,
           resourceType: Sentence.name,
-          resourceId: source.id,
+          resourceId: sentence.id,
         });
         // TODO do something if resource is reported too much (delete?) and handle spam
         return true;
@@ -74,11 +74,11 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
 
     markCompleted: {
       type: GraphQLBoolean,
-      resolve: async (source, args, ctx) => {
+      resolve: async (sentence, args, ctx) => {
         const { currentUser } = ctx;
         assert(currentUser);
-        assert(source instanceof Sentence);
-        if (source.theEnd === true)
+        assert(sentence instanceof Sentence);
+        if (sentence.theEnd === true)
           throw new Error('Sentence already marked as completed');
         /*await ensureNotSpam(Completion, {
           userId: currentUser.id,
@@ -87,11 +87,11 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         });*/
         await Completion.create({
           ownerId: currentUser.id,
-          sentenceId: source.id,
+          sentenceId: sentence.id,
         });
-        if (await checkCompletion(source)) {
-          await source.update({ theEnd: true });
-          await createStory(source);
+        if (await checkCompletion(sentence)) {
+          await sentence.update({ theEnd: true });
+          await createStory(sentence);
         }
         return true;
       },
