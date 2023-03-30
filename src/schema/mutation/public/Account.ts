@@ -11,6 +11,18 @@ import { ClientError, ClientErrorT } from 'core/errors';
 import { User } from 'definitions/models';
 import { UserType } from 'schema/output-types';
 
+async function ensureUsername(username: string) {
+  // TODO check chars and length
+  if (await User.count({ where: { username } }) > 0)
+    throw new ClientError('Username already taken', ClientErrorT.UsernameTaken);
+}
+
+async function ensureEmail(email: string) {
+  // TODO check validation code
+  if (await User.count({ where: { email } }) > 0)
+    throw new ClientError('Email already taken', ClientErrorT.EmailTaken);
+}
+
 const AccountMutation = new GraphQLObjectType({
   name: 'AccountMutation',
   fields: {
@@ -24,10 +36,8 @@ const AccountMutation = new GraphQLObjectType({
       resolve: async (parent, args, ctx) => {
         const { password, ...userArgs } = args;
         const { username, email } = userArgs;
-        if (await User.count({ where: { username } }) > 0)
-          throw new ClientError('Username already taken', ClientErrorT.UsernameTaken);
-        if (await User.count({ where: { email } }) > 0)
-          throw new ClientError('Email already taken', ClientErrorT.EmailTaken);
+        ensureUsername(username);
+        ensureEmail(email);
         const hashedPassword = await bcrypt.hash(password, 10);
         await User.create({
           password: hashedPassword,
