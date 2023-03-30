@@ -6,9 +6,9 @@ import {
   GraphQLObjectType,
   GraphQLString,
 } from 'graphql';
-// import { Minute } from 'core/utils/time';
+import { Minute } from 'core/utils/time';
 import {
-  // ensureNotSpam,
+  ensureNotSpam,
   ensureModelExistence,
 } from 'core/sequelize';
 import { Context } from 'core/context';
@@ -29,11 +29,11 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         const { parentSentenceId, text } = args;
         const { currentUser } = ctx;
         assert(currentUser);
-        /*await ensureNotSpam(Sentence, {
+        await ensureNotSpam(Sentence, {
           userId: currentUser.id,
           timeFrameMs: 5 * Minute,
           recordsLimit: 3,
-        });*/
+        });
         const parentSentence = await ensureModelExistence<Sentence>(parentSentenceId, Sentence);
         const sentence = await Sentence.create({
           ownerId: currentUser.id,
@@ -57,11 +57,11 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
           throw new Error('Cannot report initial sentence');
         if (sentence.theEnd === true)
           throw new Error('Cannot report ended sentence');
-        /*await ensureNotSpam(Report, {
+        await ensureNotSpam(Report, {
           userId: currentUser.id,
           timeFrameMs: 5 * Minute,
           recordsLimit: 3,
-        });*/
+        });
         await Report.create({
           ownerId: currentUser.id,
           resourceType: Sentence.name,
@@ -80,11 +80,11 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         assert(sentence instanceof Sentence);
         if (sentence.theEnd === true)
           throw new Error('Sentence already marked as completed');
-        /*await ensureNotSpam(Completion, {
+        await ensureNotSpam(Completion, {
           userId: currentUser.id,
           timeFrameMs: 5 * Minute,
           recordsLimit: 3,
-        });*/
+        });
         await Completion.create({
           ownerId: currentUser.id,
           sentenceId: sentence.id,
