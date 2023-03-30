@@ -13,7 +13,7 @@ import {
 } from 'core/sequelize';
 import { Context } from 'core/context';
 import { Sentence, Report, Completion } from 'definitions/models';
-import { checkCompletion } from 'definitions/helpers';
+import { checkCompletion, createStory } from 'definitions/helpers';
 import { SentenceType } from 'schema/output-types';
 
 const SentenceMutation = new GraphQLObjectType<unknown, Context>({
@@ -89,7 +89,10 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
           ownerId: currentUser.id,
           sentenceId: source.id,
         });
-        await checkCompletion(source);
+        if (await checkCompletion(source)) {
+          await source.update({ theEnd: true });
+          await createStory(source);
+        }
         return true;
       },
     },
