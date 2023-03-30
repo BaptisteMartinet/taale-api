@@ -17,6 +17,7 @@ import {
   ReportAntiSpamRecordsLimit,
   CompletionAntiSpamTimeFrameMs,
   CompletionAntiSpamRecordsLimit,
+  NbReportsToDeleteSentence,
 } from 'core/constants';
 import { Context } from 'core/context';
 import { Sentence, Report, Completion } from 'definitions/models';
@@ -74,7 +75,14 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
           resourceType: Sentence.name,
           resourceId: sentence.id,
         });
-        // TODO do something if resource is reported too much (delete?) and handle spam
+        const reportsCount = await Report.count({
+          where: {
+            resourceType: Sentence.name,
+            resourceId: sentence.id,
+          },
+        });
+        if (reportsCount >= NbReportsToDeleteSentence)
+          await sentence.destroy();
         return true;
       },
     },
