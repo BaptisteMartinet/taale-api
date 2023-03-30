@@ -1,5 +1,7 @@
 import { Locale } from 'definitions/enums';
 
+export const UsernameMinLength = 2;
+export const UsernameMaxLength = 20;
 export const PasswordMinLength = 4;
 
 export const PartialStoryNbSentences = 10;
