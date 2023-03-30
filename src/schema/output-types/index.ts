@@ -35,6 +35,7 @@ export const TreeType = new GraphQLObjectType({
   name: 'Tree',
   fields: () => ({
     id: { type: GraphQLInt },
+    name: { type: GraphQLString },
     open: { type: GraphQLBoolean },
     locale: { type: LocaleEnum },
     owner: { type: UserRestrictedType },
