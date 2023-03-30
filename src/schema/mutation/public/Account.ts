@@ -7,29 +7,10 @@ import {
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import env from 'core/env';
-import {
-  UsernameMinLength,
-  UsernameMaxLength,
-  UsernameValidationRegex,
-} from 'core/constants';
 import { ClientError, ClientErrorT } from 'core/errors';
 import { User } from 'definitions/models';
+import { ensureUsername, ensureEmail } from 'definitions/helpers';
 import { UserType } from 'schema/output-types';
-
-async function ensureUsername(username: string) {
-  if (username.length < UsernameMinLength || username.length > UsernameMaxLength)
-    throw new ClientError('Invalid username length', ClientErrorT.InvalidUsernameLength);
-  if (!UsernameValidationRegex.test(username))
-    throw new ClientError('Invalid username character', ClientErrorT.InvalidUsernameChar);
-  if (await User.count({ where: { username } }) > 0)
-    throw new ClientError('Username already taken', ClientErrorT.UsernameTaken);
-}
-
-async function ensureEmail(email: string) {
-  // TODO check validation code
-  if (await User.count({ where: { email } }) > 0)
-    throw new ClientError('Email already taken', ClientErrorT.EmailTaken);
-}
 
 const AccountMutation = new GraphQLObjectType({
   name: 'AccountMutation',
