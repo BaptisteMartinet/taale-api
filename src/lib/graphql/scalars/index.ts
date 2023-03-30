@@ -1,1 +1,1 @@
-export { default as GraphQLDate } from './date';
+export { default as GraphQLDate } from './GraphQLDate';
