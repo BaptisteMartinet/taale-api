@@ -1,13 +1,30 @@
+import { Op } from 'sequelize';
 import { Story, StorySentenceLink, Sentence } from 'definitions/models';
 import { ascendSentencesIds } from './sentence';
 
+/**
+ * 
+ * @param sentencesIds 
+ * @returns Concatenation of all Sentence texts
+ */
+export async function genStoryTitle(sentencesIds: number[]) {
+  const sentences = await Sentence.findAll({
+    where: { id: { [Op.in]: sentencesIds } },
+    limit: sentencesIds.length,
+  });
+  return sentences.map(sentence => sentence.text).join(' ');
+}
+
 export async function createStory(sentence: Sentence): Promise<void> {
+  const sentencesIds = await ascendSentencesIds(sentence.id);
+  sentencesIds.reverse();
+  const title = await genStoryTitle(sentencesIds.slice(0, 2));
   const story = await Story.create({
     sentenceId: sentence.id,
     treeId: sentence.treeId,
+    title,
   });
-  const sentencesIds = await ascendSentencesIds(sentence.id);
-  await StorySentenceLink.bulkCreate(sentencesIds.reverse().map(sentenceId => ({
+  await StorySentenceLink.bulkCreate(sentencesIds.map(sentenceId => ({
     storyId: story.id,
     sentenceId,
   })));
