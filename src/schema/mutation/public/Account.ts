@@ -8,6 +8,8 @@ import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import env from 'core/env';
 import { ClientError, ClientErrorT } from 'core/errors';
+import { TaaleEmailSender } from 'core/constants';
+import sgMail from 'core/sendgrid';
 import { User } from 'definitions/models';
 import { ensureUsername, ensureEmail } from 'definitions/helpers';
 import { UserType } from 'schema/output-types';
@@ -15,6 +17,26 @@ import { UserType } from 'schema/output-types';
 const AccountMutation = new GraphQLObjectType({
   name: 'AccountMutation',
   fields: {
+    verifyEmail: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      args: {
+        email: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      async resolve(_, args, ctx) {
+        const { email } = args;
+        // TODO texts and email validation logic
+        await ensureEmail(email);
+        await sgMail.send({
+          from: TaaleEmailSender,
+          to: email,
+          cc: TaaleEmailSender,
+          subject: 'Confirm your account creation!',
+          text: 'Here is you code: 0923',
+        });
+        return true;
+      },
+    },
+
     register: {
       type: GraphQLBoolean,
       args: {

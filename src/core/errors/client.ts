@@ -2,6 +2,7 @@ import { GraphQLError } from 'graphql';
 
 export enum ClientErrorT {
   InvalidPassword = 'InvalidPassword',
+  InvalidEmailFormat = 'InvalidEmailFormat',
   EmailTaken = 'EmailTaken',
   InvalidUsernameLength = 'InvalidUsernameLength',
   InvalidUsernameChar = 'InvalidUsernameChar',

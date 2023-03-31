@@ -1,8 +1,16 @@
+import type { EmailData } from '@sendgrid/helpers/classes/email-address';
+
 import { Minute } from 'lib/utils';
 import { Locale } from 'definitions/enums';
 
+export const TaaleEmailSender: EmailData = {
+  name: 'Taale',
+  email: 'taale.app@gmail.com',
+};
+
 export const DefaultLocale = Locale.EN;
 
+export const EmailValidationRegex = new RegExp('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$');
 export const UsernameMinLength = 2;
 export const UsernameMaxLength = 24;
 export const UsernameValidationRegex = new RegExp(`^[\\w\\.]{${UsernameMinLength},${UsernameMaxLength}}$`);

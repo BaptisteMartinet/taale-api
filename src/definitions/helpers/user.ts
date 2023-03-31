@@ -1,4 +1,5 @@
 import {
+  EmailValidationRegex,
   UsernameMinLength,
   UsernameMaxLength,
   UsernameValidationRegex,
@@ -16,7 +17,8 @@ export async function ensureUsername(username: string) {
 }
 
 export async function ensureEmail(email: string) {
-  // TODO check validation code
+  if (!EmailValidationRegex.test(email))
+    throw new ClientError('Invalid email format', ClientErrorT.InvalidEmailFormat);
   if (await User.count({ where: { email } }) > 0)
     throw new ClientError('Email already taken', ClientErrorT.EmailTaken);
 }
