@@ -21,7 +21,11 @@ import {
 } from 'core/constants';
 import { Context } from 'core/context';
 import { Sentence, Report, Completion } from 'definitions/models';
-import { checkCompletion, createStory } from 'definitions/helpers';
+import {
+  ensureSentenceText,
+  checkCompletion,
+  createStory,
+} from 'definitions/helpers';
 import { SentenceType } from 'schema/output-types';
 
 const SentenceMutation = new GraphQLObjectType<unknown, Context>({
@@ -37,6 +41,7 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         const { parentSentenceId, text } = args;
         const { currentUser } = ctx;
         assert(currentUser);
+        const formattedText = ensureSentenceText(text);
         await ensureNotSpam(Sentence, {
           user: currentUser,
           timeFrameMs: SentenceCreationAntiSpamTimeFrameMs,
@@ -47,7 +52,7 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
           ownerId: currentUser.id,
           treeId: parentSentence.treeId,
           parentSentenceId: parentSentence.id,
-          text,
+          text: formattedText,
         });
         return sentence;
       },

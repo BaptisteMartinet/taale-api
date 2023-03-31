@@ -6,6 +6,7 @@ export enum ClientErrorT {
   InvalidUsernameLength = 'InvalidUsernameLength',
   InvalidUsernameChar = 'InvalidUsernameChar',
   UsernameTaken = 'UsernameTaken',
+  InvalidSentenceLength = 'InvalidSentenceLength',
   ResourceNotFound = 'ResourceNotFound',
   SpamDetected = 'SpamDetected',
   InsufficientPermission = 'InsufficientPermission',
