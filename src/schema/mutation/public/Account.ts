@@ -6,11 +6,12 @@ import {
 } from 'graphql';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
+import { genNumericalCode } from 'lib/utils';
 import env from 'core/env';
 import { ClientError, ClientErrorT } from 'core/errors';
-import { TaaleEmailSender } from 'core/constants';
+import { TaaleEmailSender, EmailVerificationCodeLength } from 'core/constants';
 import sgMail from 'core/sendgrid';
-import { User } from 'definitions/models';
+import { User, EmailValidationCode } from 'definitions/models';
 import { ensureUsername, ensureEmail } from 'definitions/helpers';
 import { UserType } from 'schema/output-types';
 
@@ -24,14 +25,14 @@ const AccountMutation = new GraphQLObjectType({
       },
       async resolve(_, args, ctx) {
         const { email } = args;
-        // TODO texts and email validation logic
         await ensureEmail(email);
+        const code = genNumericalCode(EmailVerificationCodeLength);
+        await EmailValidationCode.upsert({ email, code }, { fields: ['email'] });
         await sgMail.send({
           from: TaaleEmailSender,
           to: email,
-          cc: TaaleEmailSender,
           subject: 'Confirm your account creation!',
-          text: 'Here is you code: 0923',
+          text: 'Here is you code: ' + code, // todo
         });
         return true;
       },
