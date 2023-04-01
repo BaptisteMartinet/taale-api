@@ -12,7 +12,11 @@ import { ClientError, ClientErrorT } from 'core/errors';
 import { TaaleEmailSender, EmailVerificationCodeLength } from 'core/constants';
 import sgMail from 'core/sendgrid';
 import { User, EmailValidationCode } from 'definitions/models';
-import { ensureUsername, ensureEmail } from 'definitions/helpers';
+import {
+  ensureUsername,
+  ensureEmail,
+  ensureEmailValidationCode,
+} from 'definitions/helpers';
 import { UserType } from 'schema/output-types';
 
 const AccountMutation = new GraphQLObjectType({
@@ -31,8 +35,8 @@ const AccountMutation = new GraphQLObjectType({
         await sgMail.send({
           from: TaaleEmailSender,
           to: email,
-          subject: 'Confirm your account creation!',
-          text: 'Here is you code: ' + code, // todo
+          subject: 'Account creation', // TODO texts
+          text: 'Here is you code: ' + code, // TODO texts
         });
         return true;
       },
@@ -44,12 +48,14 @@ const AccountMutation = new GraphQLObjectType({
         username: { type: new GraphQLNonNull(GraphQLString) },
         email: { type: new GraphQLNonNull(GraphQLString) },
         password: { type: new GraphQLNonNull(GraphQLString) },
+        emailValidationCode: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve: async (parent, args, ctx) => {
-        const { password, ...userArgs } = args;
+        const { password, emailValidationCode, ...userArgs } = args;
         const { username, email } = userArgs;
         await ensureUsername(username);
         await ensureEmail(email);
+        await ensureEmailValidationCode(email, emailValidationCode);
         const hashedPassword = await bcrypt.hash(password, 10);
         await User.create({
           password: hashedPassword,

@@ -4,3 +4,4 @@ export * from './completion';
 export * from './sentence';
 export * from './story';
 export * from './user';
+export * from './emailValidation';

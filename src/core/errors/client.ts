@@ -4,6 +4,7 @@ export enum ClientErrorT {
   InvalidPassword = 'InvalidPassword',
   InvalidEmailFormat = 'InvalidEmailFormat',
   EmailTaken = 'EmailTaken',
+  InvalidEmailValidationCode = 'InvalidEmailValidationCode',
   InvalidUsernameLength = 'InvalidUsernameLength',
   InvalidUsernameChar = 'InvalidUsernameChar',
   UsernameTaken = 'UsernameTaken',

@@ -17,7 +17,7 @@ class EmailValidationCode extends Model<InferAttributes<EmailValidationCode>, In
 
 EmailValidationCode.init({
   id: { type: DataTypes.INTEGER, allowNull: false, autoIncrement: true, primaryKey: true },
-  email: { type: DataTypes.STRING, allowNull: false },
+  email: { type: DataTypes.STRING, allowNull: false, validate: { isEmail: true } },
   code: { type: DataTypes.STRING, allowNull: false },
   createdAt: DataTypes.DATE,
   updatedAt: DataTypes.DATE,
