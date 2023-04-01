@@ -10,6 +10,7 @@ export const TaaleEmailSender: EmailData = {
 
 export const DefaultLocale = Locale.EN;
 
+export const EmailVerificationCodeLength = 4;
 export const EmailValidationRegex = new RegExp('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$');
 export const UsernameMinLength = 2;
 export const UsernameMaxLength = 24;
