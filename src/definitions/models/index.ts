@@ -5,6 +5,7 @@ import Report from './Report';
 import Completion from './Completion';
 import Story from './Story';
 import StorySentenceLink from './StorySentenceLink';
+import EmailValidationCode from './EmailValidationCode';
 
 Tree.belongsTo(User, {
   foreignKey: 'ownerId',
@@ -131,4 +132,5 @@ export {
   Completion,
   Story,
   StorySentenceLink,
+  EmailValidationCode,
 };
