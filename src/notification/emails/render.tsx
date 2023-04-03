@@ -25,7 +25,7 @@ export default function renderEmail(args: RenderEmailArgs) {
       </head>
       <body style={styles.body}>
         <main>
-          <table style={styles.table}>
+          <table style={styles.table} cellPadding={0} cellSpacing={0}>
             {element}
           </table>
         </main>
