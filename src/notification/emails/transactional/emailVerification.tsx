@@ -1,5 +1,5 @@
 import React from 'react';
-import renderEmail from 'notification/emails/render';
+import { renderEmailHTMLPage } from 'notification/emails/utils';
 
 export interface EmailValidationProps {
   code: string,
@@ -21,7 +21,7 @@ function EmailVerification(props: EmailValidationProps) {
 
 export default function render(args: EmailValidationProps) {
   const { code } = args;
-  return renderEmail({
+  return renderEmailHTMLPage({
     element: EmailVerification({ code }),
   });
 }

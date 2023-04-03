@@ -2,14 +2,14 @@ import type { ReactElement } from 'react';
 
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { ensureStylesType } from './utils';
+import { ensureStylesType } from 'notification/emails/utils';
 
 export interface RenderEmailArgs {
   title?: string;
   element: ReactElement;
 }
 
-export default function renderEmail(args: RenderEmailArgs) {
+export default function renderEmailHTMLPage(args: RenderEmailArgs) {
   const { title, element } = args;
   const doctype = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
   const html = renderToStaticMarkup(
