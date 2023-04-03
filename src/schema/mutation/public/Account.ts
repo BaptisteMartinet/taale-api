@@ -9,14 +9,14 @@ import * as jwt from 'jsonwebtoken';
 import { genNumericalCode } from 'lib/utils';
 import env from 'core/env';
 import { ClientError, ClientErrorT } from 'core/errors';
-import { TaaleEmailSender, EmailVerificationCodeLength } from 'core/constants';
-import sgMail from 'core/sendgrid';
+import { EmailVerificationCodeLength } from 'core/constants';
 import { User, EmailValidationCode } from 'definitions/models';
 import {
   ensureUsername,
   ensureEmail,
   ensureEmailValidationCode,
 } from 'definitions/helpers';
+import { onEmailVerification } from 'notification/dispatchers';
 import { UserType } from 'schema/output-types';
 
 const AccountMutation = new GraphQLObjectType({
@@ -32,12 +32,7 @@ const AccountMutation = new GraphQLObjectType({
         await ensureEmail(email);
         const code = genNumericalCode(EmailVerificationCodeLength);
         await EmailValidationCode.upsert({ email, code }, { fields: ['email'] });
-        await sgMail.send({
-          from: TaaleEmailSender,
-          to: email,
-          subject: 'Account creation', // TODO texts
-          text: 'Here is you code: ' + code, // TODO texts
-        });
+        await onEmailVerification({ email, code });
         return true;
       },
     },
