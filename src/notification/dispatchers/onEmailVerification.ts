@@ -12,7 +12,7 @@ export default function onEmailVerification(args: sendEmailVerificationCodeArgs)
   return sgMail.send({
     from: TaaleEmailSender,
     to: email,
-    subject: 'Account creation', // TODO texts
+    subject: 'Verify your email', // TODO texts
     html: render({ code }),
   });
 }

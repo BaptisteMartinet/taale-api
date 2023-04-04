@@ -24,11 +24,17 @@ export default function renderEmailHTMLPage(args: RenderEmailArgs) {
         {title && <title>{title}</title>}
       </head>
       <body style={styles.body}>
-        <main>
-          <table style={styles.table} cellPadding={0} cellSpacing={0}>
-            {element}
-          </table>
-        </main>
+        <table style={styles.outerTable} border={0} cellPadding={0} cellSpacing={0}>
+          <tbody>
+            <tr>
+              <td align="center">
+                <table style={styles.innerTable} border={0} cellPadding={0} cellSpacing={0}>
+                  {element}
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </body>
     </html>
   );
@@ -42,8 +48,11 @@ const styles = ensureStylesType({
     fontFamily: 'Roboto, Arial, sans-serif',
     fontWeight: 400,
   },
-  table: {
+  outerTable: {
     width: '100%',
-    border: 0,
+  },
+  innerTable: {
+    width: '100%',
+    maxWidth: '600px',
   },
 });
