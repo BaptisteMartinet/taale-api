@@ -33,7 +33,7 @@ const AccountMutation = new GraphQLObjectType<unknown, Context>({
         const { email } = args;
         await ensureEmail(email);
         const code = genNumericalCode(EmailVerificationCodeLength);
-        await EmailValidationCode.upsert({ email, code }, { fields: ['email'] });
+        await EmailValidationCode.upsert({ email, code }, { fields: ['code'] });
         await onEmailVerification({ email, code }, ctx);
         return true;
       },
