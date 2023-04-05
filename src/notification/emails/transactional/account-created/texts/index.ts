@@ -8,7 +8,7 @@ interface Definition {
 
 const FR: Definition = {
   subject: (username) => `Bienvenue sur Taale ${username}`,
-  body: "Vous faite officielement partit de la communauté, amusez vous bien !",
+  body: "Vous faites officielement partie de la communauté, amusez vous bien !",
 };
 
 const EN: Definition = {
