@@ -18,7 +18,7 @@ import {
   ensureEmail,
   ensureEmailValidationCode,
 } from 'definitions/helpers';
-import { onEmailVerification } from 'notification/dispatchers';
+import { onEmailVerification, onAccountCreated } from 'notification/dispatchers';
 import { UserType } from 'schema/output-types';
 
 const AccountMutation = new GraphQLObjectType<unknown, Context>({
@@ -54,10 +54,11 @@ const AccountMutation = new GraphQLObjectType<unknown, Context>({
         await ensureEmail(email);
         await ensureEmailValidationCode(email, emailValidationCode);
         const hashedPassword = await bcrypt.hash(password, 10);
-        await User.create({
+        const user = await User.create({
           password: hashedPassword,
           ...userArgs,
         });
+        await onAccountCreated({ user }, ctx);
         return true;
       },
     },
