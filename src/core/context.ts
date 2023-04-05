@@ -14,14 +14,15 @@ export interface Context extends BaseContext {
 }
 
 const context: ContextFunction<[StandaloneServerContextFunctionArgument], Context> = async ({ req, res }) => {
-  const locale = strToLocale(req.headers['content-language']);
+  const contentLanguageHeader = req.headers['content-language'];
+  const locale = strToLocale(contentLanguageHeader);
   const ctx: Context = { locale };
   const authHeader = req.headers.authorization;
   if (!authHeader)
     return ctx;
   const [, token] = authHeader.split(' ');
   if (!token)
-    return ctx;
+    throw new Error('Invalid authorization header');
   try {
     const payload = jwt.verify(token, env.JWT_SECRET_KEY) as jwt.JwtPayload;
     ctx.currentUserId = payload.userId;
