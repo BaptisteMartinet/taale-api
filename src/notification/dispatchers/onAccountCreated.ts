@@ -23,8 +23,8 @@ export default function onAccountCreated(args: onAccountCreatedArgs, ctx: Contex
     sgMail.send({
       from: TaaleEmailSender,
       to: TaaleEmailSender,
-      subject: T.subject(user.username),
-      html: render({ ctx }),
+      subject: 'New account',
+      text: `A new user has been registered:\n${JSON.stringify(user.toJSON(), null, 4)}`,
     }),
   ])
 }
