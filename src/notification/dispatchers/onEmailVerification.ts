@@ -5,12 +5,12 @@ import sgMail from 'core/sendgrid';
 import render from 'notification/emails/transactional/email-verification';
 import texts from 'notification/emails/transactional/email-verification/texts';
 
-export interface sendEmailVerificationCodeArgs {
+export interface onEmailVerificationArgs {
   email: string;
   code: string;
 }
 
-export default function onEmailVerification(args: sendEmailVerificationCodeArgs, ctx: Context) {
+export default function onEmailVerification(args: onEmailVerificationArgs, ctx: Context) {
   const { email, code } = args;
   const T = texts(ctx.locale);
   return sgMail.send({
