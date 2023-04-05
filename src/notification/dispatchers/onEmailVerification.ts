@@ -1,18 +1,22 @@
-import sgMail from 'core/sendgrid';
+import type { Context } from 'core/context';
+
 import { TaaleEmailSender } from 'core/constants';
-import render from 'notification/emails/transactional/emailVerification';
+import sgMail from 'core/sendgrid';
+import render from 'notification/emails/transactional/email-verification';
+import texts from 'notification/emails/transactional/email-verification/texts';
 
 export interface sendEmailVerificationCodeArgs {
   email: string;
   code: string;
 }
 
-export default function onEmailVerification(args: sendEmailVerificationCodeArgs) {
+export default function onEmailVerification(args: sendEmailVerificationCodeArgs, ctx: Context) {
   const { email, code } = args;
+  const T = texts(ctx.locale);
   return sgMail.send({
     from: TaaleEmailSender,
     to: email,
-    subject: 'Verify your email', // TODO texts
-    html: render({ code }),
+    subject: T.subject,
+    html: render({ code, ctx }),
   });
 }

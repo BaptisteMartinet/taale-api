@@ -1,3 +1,5 @@
+import type { Context } from 'core/context';
+
 import {
   GraphQLBoolean,
   GraphQLNonNull,
@@ -19,7 +21,7 @@ import {
 import { onEmailVerification } from 'notification/dispatchers';
 import { UserType } from 'schema/output-types';
 
-const AccountMutation = new GraphQLObjectType({
+const AccountMutation = new GraphQLObjectType<unknown, Context>({
   name: 'AccountMutation',
   fields: {
     verifyEmail: {
@@ -32,7 +34,7 @@ const AccountMutation = new GraphQLObjectType({
         await ensureEmail(email);
         const code = genNumericalCode(EmailVerificationCodeLength);
         await EmailValidationCode.upsert({ email, code }, { fields: ['email'] });
-        await onEmailVerification({ email, code });
+        await onEmailVerification({ email, code }, ctx);
         return true;
       },
     },
