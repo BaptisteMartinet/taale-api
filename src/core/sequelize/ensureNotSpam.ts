@@ -1,7 +1,7 @@
 import type { ModelStatic, Model } from 'sequelize';
 
 import { Op } from 'sequelize';
-import { ClientError, ClientErrorT } from 'core/errors';
+import { ClientError } from 'core/errors';
 import { Role } from 'definitions/enums';
 import { User } from 'definitions/models';
 
@@ -22,7 +22,7 @@ async function ensureNotSpam(model: ModelStatic<Model>, opts: CheckSpamOpts): Pr
     }
   });
   if (nbRecords >= recordsLimit)
-    throw new ClientError('Spam detected', ClientErrorT.SpamDetected);
+    throw new ClientError('Spam detected', 'SpamDetected');
 }
 
 export default ensureNotSpam;

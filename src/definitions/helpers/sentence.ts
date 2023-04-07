@@ -4,7 +4,7 @@ import {
   SentenceTextMinLength,
   SentenceTextMaxLength,
 } from 'core/constants';
-import { ClientError, ClientErrorT } from 'core/errors';
+import { ClientError } from 'core/errors';
 
 export async function ascendSentencesIds(sentenceId: number): Promise<number[]> {
   const records = await sequelize.query<{ id: number, parentSentenceId: number }>(`
@@ -36,6 +36,6 @@ export async function ascendSentencesIdsWithLimit(sentenceId: number, limit: num
 export function ensureSentenceText(text: string) {
   const trimmedText = text.trim();
   if (trimmedText.length < SentenceTextMinLength || trimmedText.length > SentenceTextMaxLength)
-    throw new ClientError('Invalid sentence length', ClientErrorT.InvalidSentenceLength);
+    throw new ClientError('Invalid sentence length', 'InvalidSentenceLength');
   return trimmedText;
 }

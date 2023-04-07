@@ -10,7 +10,7 @@ import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { genNumericalCode } from 'lib/utils';
 import env from 'core/env';
-import { ClientError, ClientErrorT } from 'core/errors';
+import { ClientError } from 'core/errors';
 import { EmailVerificationCodeLength } from 'core/constants';
 import { User, EmailValidationCode } from 'definitions/models';
 import {
@@ -79,9 +79,9 @@ const AccountMutation = new GraphQLObjectType<unknown, Context>({
         const { email, password } = args;
         const user = await User.findOne({ where: { email } });
         if (!user)
-          throw new ClientError('Invalid login or password', ClientErrorT.InvalidLoginOrPassword);
+          throw new ClientError('Invalid login or pass', 'InvalidLoginOrPassword');
         if (!bcrypt.compareSync(password, user.password))
-          throw new ClientError('Invalid login or password', ClientErrorT.InvalidLoginOrPassword);
+          throw new ClientError('Invalid login or pass', 'InvalidLoginOrPassword');
         const token = jwt.sign({ userId: user.id }, env.JWT_SECRET_KEY, { expiresIn: '7d' });
         return { user, token };
       },

@@ -1,11 +1,11 @@
 import { GraphQLError } from 'graphql';
 
-export enum ServerErrorT {}
+export type ServerErrorT = null;
 
 class ServerError extends GraphQLError {
   constructor(message: string, type: ServerErrorT) {
     super(message);
-    Object.defineProperty(this, 'name', { value: 'ServerError' });
+    this.name = 'ServerError';
     this.extensions.code = type;
   }
 }
