@@ -79,9 +79,9 @@ const AccountMutation = new GraphQLObjectType<unknown, Context>({
         const { email, password } = args;
         const user = await User.findOne({ where: { email } });
         if (!user)
-          throw new ClientError('User does not exists', ClientErrorT.ResourceNotFound);
+          throw new ClientError('Invalid login or password', ClientErrorT.InvalidLoginOrPassword);
         if (!bcrypt.compareSync(password, user.password))
-          throw new ClientError('Invalid password', ClientErrorT.InvalidPassword);
+          throw new ClientError('Invalid login or password', ClientErrorT.InvalidLoginOrPassword);
         const token = jwt.sign({ userId: user.id }, env.JWT_SECRET_KEY, { expiresIn: '7d' });
         return { user, token };
       },
