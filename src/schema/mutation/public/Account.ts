@@ -39,6 +39,25 @@ const AccountMutation = new GraphQLObjectType<unknown, Context>({
       },
     },
 
+    resendEmailVerificationCode: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      args: {
+        email: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      async resolve(_, args, ctx) {
+        const { email } = args;
+        const emailValidationCode = await EmailValidationCode.findOne({
+          where: { email },
+          attributes: ['code'],
+        });
+        if (emailValidationCode === null)
+          throw new ClientError(`Unable to find EmailValidationCode for ${email}`, 'InvalidArgument');
+        const { code } = emailValidationCode;
+        await onEmailVerification({ email, code }, ctx);
+        return true;
+      },
+    },
+
     register: {
       type: GraphQLBoolean,
       args: {
