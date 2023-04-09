@@ -1,6 +1,6 @@
 import { GraphQLError } from 'graphql';
 
-export type ClientErrorType =
+export type ClientErrorType = (
   'InvalidLoginOrPassword' |
   'InvalidEmailFormat' |
   'EmailTaken' |
@@ -11,7 +11,9 @@ export type ClientErrorType =
   'InvalidSentenceLength' |
   'ResourceNotFound' |
   'SpamDetected' |
-  'InsufficientPermission';
+  'InsufficientPermission' |
+  'InvalidArgument'
+);
 
 class ClientError extends GraphQLError {
   constructor(message: string, type: ClientErrorType) {
