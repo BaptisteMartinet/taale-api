@@ -1,6 +1,7 @@
 import assert from 'assert';
-import { GraphQLList, GraphQLObjectType } from 'graphql';
+import { GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { Op } from 'sequelize';
+import { GraphQLNonNullList } from 'lib/graphql';
 import { PartialStoryNbSentences } from 'core/constants';
 import sequelize from 'core/sequelize';
 import { expose } from 'core/graphql';
@@ -25,7 +26,7 @@ const AuthenticatedQuery = new GraphQLObjectType<unknown, Context>({
     },
 
     partialStory: {
-      type: new GraphQLList(SentenceType),
+      type: new GraphQLNonNullList(SentenceType),
       resolve: async (source, args, ctx) => {
         const { locale } = ctx;
         const randomSentence = await Sentence.findOne({
@@ -51,7 +52,7 @@ const AuthenticatedQuery = new GraphQLObjectType<unknown, Context>({
     },
 
     myStories: {
-      type: new GraphQLList(StoryType),
+      type: new GraphQLNonNull(new GraphQLNonNullList(StoryType)),
       resolve(source, args, ctx) {
         const { currentUser } = ctx;
         assert(currentUser);
