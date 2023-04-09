@@ -42,7 +42,7 @@ const AuthenticatedQuery = new GraphQLObjectType<unknown, Context>({
           throw new Error('Unable to fetch random sentence within the trees');
         const sentencesIds = await ascendSentencesIdsWithLimit(randomSentence.id, PartialStoryNbSentences);
         return Sentence.findAll({
-          where: { id: { [Op.in]: sentencesIds }},
+          where: { id: { [Op.in]: sentencesIds } },
           include: {
             association: Sentence.associations.owner,
             required: true,
