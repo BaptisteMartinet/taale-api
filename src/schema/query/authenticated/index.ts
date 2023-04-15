@@ -10,11 +10,13 @@ import { Sentence, Story, StorySentenceLink } from 'definitions/models';
 import { ascendSentencesIdsWithLimit } from 'definitions/helpers';
 import { SentenceType, UserType, StoryType } from 'schema/output-types';
 import AdminQuery from './admin';
+import StatisticsQuery from './statistics';
 
 const AuthenticatedQuery = new GraphQLObjectType<unknown, Context>({
   name: 'AuthenticatedQuery',
   fields: {
     admin: expose(AdminQuery, { ensureAdmin: true }),
+    statistics: expose(StatisticsQuery),
 
     account: {
       type: UserType,
