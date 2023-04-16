@@ -105,7 +105,7 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         assert(currentUser);
         assert(sentence instanceof Sentence);
         if (sentence.parentSentenceId === null)
-          throw new ClientError('Unable to vote for the initial sentence', 'InvalidCompleteVote');
+          throw new Error('Unable to vote for the initial sentence');
         if (sentence.theEnd === true)
           throw new ClientError('Sentence already marked completed', 'SentenceAlreadyPartOfStory');
         await ensureNotSpam(Completion, {
