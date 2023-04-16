@@ -7,6 +7,7 @@ const LocaleToText = new Map<Locale, string>([
   [Locale.DE, 'Es war einmal,'],
   [Locale.PT, 'Era uma vez,'],
   [Locale.IT, "C'era una volta,"],
+  [Locale.RU, "Давным-давно,"],
 ]);
 
 export function genInitialSentenceText(locale: Locale): string {
