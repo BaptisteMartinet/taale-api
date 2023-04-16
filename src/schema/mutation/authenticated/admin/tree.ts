@@ -35,8 +35,6 @@ const TreeMutation = new GraphQLObjectType<unknown, Context>({
         return tree;
       },
     },
-    // update
-    // delete
 
     close: {
       type: GraphQLBoolean,
