@@ -2,7 +2,6 @@ import type { Context } from 'core/context';
 
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
-import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import env from './core/env';
 import sequelize from 'core/sequelize';
 import context from 'core/context';
@@ -12,9 +11,6 @@ const server = new ApolloServer<Context>({
   schema,
   cache: 'bounded',
   csrfPrevention: true,
-  // TODO remove these two lines
-  introspection: true,
-  plugins: [ ApolloServerPluginLandingPageLocalDefault() ],
 });
 
 async function init() {
