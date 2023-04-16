@@ -20,16 +20,16 @@ export const PasswordMinLength = 4;
 export const SentenceTextMinLength = 3;
 export const SentenceTextMaxLength = 180;
 
-export const NbReportsToDeleteSentence = 3;
-export const NbCompletionsToMarkComplete = 3;
+export const NbReportsToDeleteSentence = 5;
+export const NbCompletionsToMarkComplete = 5;
 
-export const SentenceCreationAntiSpamTimeFrameMs = 5 * Minute;
-export const SentenceCreationAntiSpamRecordsLimit = 3;
+export const SentenceCreationAntiSpamTimeFrameMs = 15 * Minute;
+export const SentenceCreationAntiSpamRecordsLimit = 10;
 
-export const ReportAntiSpamTimeFrameMs = 5 * Minute;
-export const ReportAntiSpamRecordsLimit = 3;
+export const ReportAntiSpamTimeFrameMs = 15 * Minute;
+export const ReportAntiSpamRecordsLimit = 20;
 
-export const CompletionAntiSpamTimeFrameMs = 5 * Minute;
+export const CompletionAntiSpamTimeFrameMs = 15 * Minute;
 export const CompletionAntiSpamRecordsLimit = 3;
 
-export const PartialStoryNbSentences = 10;
+export const PartialStoryNbSentences = 8;
