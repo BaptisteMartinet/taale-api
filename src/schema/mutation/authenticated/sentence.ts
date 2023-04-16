@@ -20,6 +20,7 @@ import {
   NbReportsToDeleteSentence,
 } from 'core/constants';
 import { Context } from 'core/context';
+import { ClientError } from 'core/errors';
 import { Sentence, Report, Completion } from 'definitions/models';
 import {
   ensureSentenceText,
@@ -65,9 +66,9 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         assert(currentUser);
         assert(sentence instanceof Sentence);
         if (sentence.parentSentenceId === null)
-          throw new Error('Cannot report initial sentence');
+          throw new ClientError('Cannot report initial sentence', 'InvalidReport');
         if (sentence.theEnd === true)
-          throw new Error('Cannot report ended sentence');
+          throw new ClientError('Cannot report sentence', 'SentenceAlreadyPartOfStory');
         await ensureNotSpam(Report, {
           user: currentUser,
           timeFrameMs: ReportAntiSpamTimeFrameMs,
@@ -97,7 +98,7 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         assert(currentUser);
         assert(sentence instanceof Sentence);
         if (sentence.theEnd === true)
-          throw new Error('Sentence already marked as completed');
+          throw new ClientError('Sentence already marked completed', 'SentenceAlreadyPartOfStory');
         await ensureNotSpam(Completion, {
           user: currentUser,
           timeFrameMs: CompletionAntiSpamTimeFrameMs,

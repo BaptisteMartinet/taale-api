@@ -12,7 +12,9 @@ export type ClientErrorType = (
   'ResourceNotFound' |
   'SpamDetected' |
   'InsufficientPermission' |
-  'InvalidArgument'
+  'InvalidArgument' |
+  'InvalidReport' |
+  'SentenceAlreadyPartOfStory'
 );
 
 class ClientError extends GraphQLError {

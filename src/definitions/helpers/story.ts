@@ -1,4 +1,5 @@
 import { Op } from 'sequelize';
+import { ClientError } from 'core/errors';
 import { Story, StorySentenceLink, Sentence } from 'definitions/models';
 import { ascendSentencesIds } from './sentence';
 
@@ -13,7 +14,7 @@ async function genStoryTitle(sentencesIds: number[]) {
 
 export async function createStory(sentence: Sentence) {
   if (sentence.theEnd)
-    throw new Error('Sentence already marked as completed');
+    throw new ClientError('Sentence already marked completed', 'SentenceAlreadyPartOfStory');
   await sentence.update({ theEnd: true });
   const sentencesIds = await ascendSentencesIds(sentence.id);
   sentencesIds.reverse();
