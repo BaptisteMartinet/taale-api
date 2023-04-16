@@ -57,8 +57,6 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         return sentence;
       },
     },
-    // update
-    // delete
 
     report: {
       type: GraphQLBoolean,
