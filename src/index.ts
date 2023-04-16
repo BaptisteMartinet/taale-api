@@ -23,11 +23,11 @@ async function init() {
     console.error('Unable to connect to database:', e);
     return;
   }
-  const instance = await startStandaloneServer(server, {
+  const { url } = await startStandaloneServer(server, {
     listen: { port: env.PORT },
     context,
   });
-  console.info(`🚀 Server ready at: ${instance.url}`);
+  console.info(`🚀 Server ready at: ${url}`);
 }
 
 init().catch((e) => { console.error(e) });
