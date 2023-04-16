@@ -12,6 +12,8 @@ async function genStoryTitle(sentencesIds: number[]) {
 }
 
 export async function createStory(sentence: Sentence) {
+  if (sentence.theEnd)
+    throw new Error('Sentence already marked as completed');
   await sentence.update({ theEnd: true });
   const sentencesIds = await ascendSentencesIds(sentence.id);
   sentencesIds.reverse();
