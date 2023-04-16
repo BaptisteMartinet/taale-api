@@ -74,13 +74,13 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
           throw new Error('Cannot report initial sentence');
         if (sentence.theEnd === true)
           throw new ClientError('Cannot report sentence', 'SentenceAlreadyPartOfStory');
+        if (await StorySentenceLink.count({ where: { sentenceId: sentence.id } }) > 0)
+          throw new ClientError('Sentence already part of story', 'SentenceAlreadyPartOfStory');
         await ensureNotSpam(Report, {
           user: currentUser,
           timeFrameMs: ReportAntiSpamTimeFrameMs,
           recordsLimit: ReportAntiSpamRecordsLimit,
         });
-        if (await StorySentenceLink.count({ where: { sentenceId: sentence.id } }) > 0)
-          throw new ClientError('Sentence already part of story', 'SentenceAlreadyPartOfStory');
         await Report.create({
           ownerId: currentUser.id,
           resourceType: Sentence.name,
