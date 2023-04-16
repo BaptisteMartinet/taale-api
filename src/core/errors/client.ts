@@ -13,7 +13,6 @@ export type ClientErrorType = (
   'SpamDetected' |
   'InsufficientPermission' |
   'InvalidArgument' |
-  'InvalidReport' |
   'SentenceAlreadyPartOfStory'
 );
 

@@ -71,7 +71,7 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
         assert(currentUser);
         assert(sentence instanceof Sentence);
         if (sentence.parentSentenceId === null)
-          throw new ClientError('Cannot report initial sentence', 'InvalidReport');
+          throw new Error('Cannot report initial sentence');
         if (sentence.theEnd === true)
           throw new ClientError('Cannot report sentence', 'SentenceAlreadyPartOfStory');
         await ensureNotSpam(Report, {
