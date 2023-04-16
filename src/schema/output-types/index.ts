@@ -1,6 +1,7 @@
 import {
   GraphQLBoolean,
   GraphQLInt,
+  GraphQLNonNull,
   GraphQLObjectType,
   GraphQLString,
 } from 'graphql';
@@ -12,53 +13,53 @@ import { RoleEnum, LocaleEnum } from 'definitions/enums';
 export const UserType = new GraphQLObjectType({
   name: 'User',
   fields: () => ({
-    id: { type: GraphQLInt },
-    username: { type: GraphQLString },
-    email: { type: GraphQLString },
-    role: { type: RoleEnum },
-    createdAt: { type: GraphQLDate },
-    updatedAt: { type: GraphQLDate },
+    id: { type: new GraphQLNonNull(GraphQLInt) },
+    username: { type: new GraphQLNonNull(GraphQLString) },
+    email: { type: new GraphQLNonNull(GraphQLString) },
+    role: { type: new GraphQLNonNull(RoleEnum) },
+    createdAt: { type: new GraphQLNonNull(GraphQLDate) },
+    updatedAt: { type: new GraphQLNonNull(GraphQLDate) },
   }),
 });
 
 export const UserRestrictedType = new GraphQLObjectType({
   name: 'UserRestricted',
   fields: () => ({
-    id: { type: GraphQLInt },
-    username: { type: GraphQLString },
+    id: { type: new GraphQLNonNull(GraphQLInt) },
+    username: { type: new GraphQLNonNull(GraphQLString) },
   }),
 });
 
 export const TreeType = new GraphQLObjectType({
   name: 'Tree',
   fields: () => ({
-    id: { type: GraphQLInt },
-    name: { type: GraphQLString },
-    open: { type: GraphQLBoolean },
-    locale: { type: LocaleEnum },
+    id: { type: new GraphQLNonNull(GraphQLInt) },
+    name: { type: new GraphQLNonNull(GraphQLString) },
+    open: { type: new GraphQLNonNull(GraphQLBoolean) },
+    locale: { type: new GraphQLNonNull(LocaleEnum) },
     owner: { type: UserRestrictedType },
     sentences: { type: new GraphQLNonNullList(SentenceType) },
-    createdAt: { type: GraphQLDate },
-    updatedAt: { type: GraphQLDate },
+    createdAt: { type: new GraphQLNonNull(GraphQLDate) },
+    updatedAt: { type: new GraphQLNonNull(GraphQLDate) },
   }),
 });
 
 export const SentenceType = new GraphQLObjectType({
   name: 'Sentence',
   fields: () => ({
-    id: { type: GraphQLInt },
-    text: { type: GraphQLString },
+    id: { type: new GraphQLNonNull(GraphQLInt) },
+    text: { type: new GraphQLNonNull(GraphQLString) },
     owner: { type: UserRestrictedType },
-    createdAt: { type: GraphQLDate },
-    updatedAt: { type: GraphQLDate },
+    createdAt: { type: new GraphQLNonNull(GraphQLDate) },
+    updatedAt: { type: new GraphQLNonNull(GraphQLDate) },
   }),
 });
 
 export const StoryType = new GraphQLObjectType<Story, Context>({
   name: 'Story',
   fields: () => ({
-    id: { type: GraphQLInt },
-    title: { type: GraphQLString },
+    id: { type: new GraphQLNonNull(GraphQLInt) },
+    title: { type: new GraphQLNonNull(GraphQLString) },
     sentences: {
       type: new GraphQLNonNullList(SentenceType),
       resolve: async (story) => {
@@ -77,7 +78,7 @@ export const StoryType = new GraphQLObjectType<Story, Context>({
         });
       },
     },
-    createdAt: { type: GraphQLDate },
-    updatedAt: { type: GraphQLDate },
+    createdAt: { type: new GraphQLNonNull(GraphQLDate) },
+    updatedAt: { type: new GraphQLNonNull(GraphQLDate) },
   }),
 });
