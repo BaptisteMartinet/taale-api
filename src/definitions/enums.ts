@@ -14,6 +14,7 @@ export const RoleEnum = new GraphQLEnumType({
 export enum Locale {
   FR = 'fr',
   EN = 'en',
+  ES = 'es',
 }
 
 export const LocaleEnum = new GraphQLEnumType({
