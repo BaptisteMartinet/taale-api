@@ -76,6 +76,8 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
           throw new ClientError('Cannot report sentence', 'SentenceAlreadyPartOfStory');
         if (await StorySentenceLink.count({ where: { sentenceId: sentence.id } }) > 0)
           throw new ClientError('Sentence already part of story', 'SentenceAlreadyPartOfStory');
+        if (await Report.count({ where: { resourceType: Report.name, resourceId: sentence.id, ownerId: currentUser.id } }) > 0)
+          throw new ClientError('Sentence already reported', 'SentenceAlreadyReported');
         await ensureNotSpam(Report, {
           user: currentUser,
           timeFrameMs: ReportAntiSpamTimeFrameMs,
@@ -108,6 +110,8 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
           throw new Error('Unable to vote for the initial sentence');
         if (sentence.theEnd === true)
           throw new ClientError('Sentence already marked completed', 'SentenceAlreadyPartOfStory');
+        if (await Completion.count({ where: { sentenceId: sentence.id, ownerId: currentUser.id } }) > 0)
+          throw new ClientError('Sentence already marked complete', 'SentenceAlreadyMarkedComplete');
         await ensureNotSpam(Completion, {
           user: currentUser,
           timeFrameMs: CompletionAntiSpamTimeFrameMs,

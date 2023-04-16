@@ -13,7 +13,9 @@ export type ClientErrorType = (
   'SpamDetected' |
   'InsufficientPermission' |
   'InvalidArgument' |
-  'SentenceAlreadyPartOfStory'
+  'SentenceAlreadyPartOfStory' |
+  'SentenceAlreadyReported' |
+  'SentenceAlreadyMarkedComplete'
 );
 
 class ClientError extends GraphQLError {
