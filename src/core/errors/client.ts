@@ -12,6 +12,7 @@ export type ClientErrorType = (
   'ResourceNotFound' |
   'SpamDetected' |
   'InsufficientPermission' |
+  'InvalidCompleteVote' |
   'InvalidArgument' |
   'InvalidReport' |
   'SentenceAlreadyPartOfStory'
