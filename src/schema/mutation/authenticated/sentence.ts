@@ -21,7 +21,12 @@ import {
 } from 'core/constants';
 import { Context } from 'core/context';
 import { ClientError } from 'core/errors';
-import { Sentence, Report, Completion } from 'definitions/models';
+import {
+  Sentence,
+  Report,
+  Completion,
+  StorySentenceLink,
+} from 'definitions/models';
 import {
   ensureSentenceText,
   checkCompletion,
@@ -74,6 +79,8 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
           timeFrameMs: ReportAntiSpamTimeFrameMs,
           recordsLimit: ReportAntiSpamRecordsLimit,
         });
+        if (await StorySentenceLink.count({ where: { sentenceId: sentence.id } }) > 0)
+          throw new ClientError('Sentence already part of story', 'SentenceAlreadyPartOfStory');
         await Report.create({
           ownerId: currentUser.id,
           resourceType: Sentence.name,
