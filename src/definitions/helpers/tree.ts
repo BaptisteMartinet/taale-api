@@ -1,11 +1,11 @@
 import { Locale } from 'definitions/enums';
 
 const LocaleToText = new Map<Locale, string>([
-  [Locale.FR, 'Il était une fois,'],
-  [Locale.EN, 'Once upon a time,'],
-  [Locale.ES, 'Érase una vez,'],
-  [Locale.DE, 'Es war einmal,'],
-  [Locale.PT, 'Era uma vez,'],
+  [Locale.FR, "Il était une fois,"],
+  [Locale.EN, "Once upon a time,"],
+  [Locale.ES, "Érase una vez,"],
+  [Locale.DE, "Es war einmal,"],
+  [Locale.PT, "Era uma vez,"],
   [Locale.IT, "C'era una volta,"],
   [Locale.RU, "Давным-давно,"],
   [Locale.PL, "Pewnego razu,"],
