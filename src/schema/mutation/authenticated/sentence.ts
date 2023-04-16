@@ -32,7 +32,7 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
   name: 'SentenceMutation',
   fields: {
     create: {
-      type: SentenceType,
+      type: new GraphQLNonNull(SentenceType),
       args: {
         parentSentenceId: { type: new GraphQLNonNull(GraphQLInt) },
         text: { type: new GraphQLNonNull(GraphQLString) },
@@ -59,7 +59,7 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
     },
 
     report: {
-      type: GraphQLBoolean,
+      type: new GraphQLNonNull(GraphQLBoolean),
       resolve: async (sentence, args, ctx) => {
         const { currentUser } = ctx;
         assert(currentUser);
@@ -91,7 +91,7 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
     },
 
     markCompleted: {
-      type: GraphQLBoolean,
+      type: new GraphQLNonNull(GraphQLBoolean),
       resolve: async (sentence, args, ctx) => {
         const { currentUser } = ctx;
         assert(currentUser);
