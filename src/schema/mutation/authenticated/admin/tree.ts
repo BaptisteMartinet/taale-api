@@ -10,7 +10,7 @@ const TreeMutation = new GraphQLObjectType<unknown, Context>({
   name: 'TreeMutation',
   fields: {
     create: {
-      type: TreeType,
+      type: new GraphQLNonNull(TreeType),
       args: {
         name: { type: new GraphQLNonNull(GraphQLString) },
         open: { type: new GraphQLNonNull(GraphQLBoolean) },
