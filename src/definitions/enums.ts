@@ -17,6 +17,7 @@ export enum Locale {
   ES = 'es',
   DE = 'de',
   PT = 'pt',
+  IT = 'it',
 }
 
 export const LocaleEnum = new GraphQLEnumType({
