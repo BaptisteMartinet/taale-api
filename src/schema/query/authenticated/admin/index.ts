@@ -2,8 +2,8 @@ import type { Context } from 'core/context';
 
 import { GraphQLObjectType } from 'graphql';
 import { GraphQLNonNullList } from 'lib/graphql';
-import { User, Tree } from 'definitions/models';
-import { UserRestrictedType, TreeType } from 'schema/output-types';
+import { User, Tree, Sentence } from 'definitions/models';
+import { UserRestrictedType, TreeType, SentenceType } from 'schema/output-types';
 
 const AdminQuery = new GraphQLObjectType<unknown, Context>({
   name: 'AdminQuery',
@@ -16,6 +16,11 @@ const AdminQuery = new GraphQLObjectType<unknown, Context>({
     trees: {
       type: new GraphQLNonNullList(TreeType),
       resolve: () => Tree.findAll({ include: [Tree.associations.owner, Tree.associations.sentences] }),
+    },
+
+    sentences: {
+      type: new GraphQLNonNullList(SentenceType),
+      resolve: () => Sentence.findAll({ include: Sentence.associations.owner }),
     },
   },
 });
