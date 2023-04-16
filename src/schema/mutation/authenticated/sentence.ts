@@ -109,10 +109,8 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
           ownerId: currentUser.id,
           sentenceId: sentence.id,
         });
-        if (await checkCompletion(sentence)) {
-          await sentence.update({ theEnd: true });
+        if (await checkCompletion(sentence))
           await createStory(sentence);
-        }
         return true;
       },
     },

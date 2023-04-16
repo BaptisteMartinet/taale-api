@@ -11,7 +11,8 @@ async function genStoryTitle(sentencesIds: number[]) {
   return sentences.map(sentence => sentence.text).join(' ');
 }
 
-export async function createStory(sentence: Sentence): Promise<void> {
+export async function createStory(sentence: Sentence) {
+  await sentence.update({ theEnd: true });
   const sentencesIds = await ascendSentencesIds(sentence.id);
   sentencesIds.reverse();
   const title = await genStoryTitle(sentencesIds.slice(0, 2));
@@ -24,4 +25,5 @@ export async function createStory(sentence: Sentence): Promise<void> {
     storyId: story.id,
     sentenceId,
   })));
+  return story;
 }
