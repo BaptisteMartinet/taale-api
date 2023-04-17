@@ -76,7 +76,7 @@ const SentenceMutation = new GraphQLObjectType<unknown, Context>({
           throw new ClientError('Cannot report sentence', 'SentenceAlreadyPartOfStory');
         if (await StorySentenceLink.count({ where: { sentenceId: sentence.id } }) > 0)
           throw new ClientError('Sentence already part of story', 'SentenceAlreadyPartOfStory');
-        if (await Report.count({ where: { resourceType: Report.name, resourceId: sentence.id, ownerId: currentUser.id } }) > 0)
+        if (await Report.count({ where: { resourceType: Sentence.name, resourceId: sentence.id, ownerId: currentUser.id } }) > 0)
           throw new ClientError('Sentence already reported', 'SentenceAlreadyReported');
         await ensureNotSpam(Report, {
           user: currentUser,
