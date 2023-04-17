@@ -7,26 +7,10 @@ import Story from './Story';
 import StorySentenceLink from './StorySentenceLink';
 import EmailValidationCode from './EmailValidationCode';
 
-Tree.belongsTo(User, {
-  foreignKey: 'ownerId',
-  targetKey: 'id',
-  as: 'owner',
-});
-Tree.hasMany(Sentence, {
-  sourceKey: 'id',
-  foreignKey: 'treeId',
-  as: 'sentences',
-});
-Tree.hasMany(Story, {
-  sourceKey: 'id',
-  foreignKey: 'treeId',
-  as: 'stories',
-});
-
 User.hasMany(Tree, {
   sourceKey: 'id',
   foreignKey: 'ownerId',
-  as: 'stories',
+  as: 'trees',
 });
 User.hasMany(Sentence, {
   sourceKey: 'id',
@@ -42,6 +26,22 @@ User.hasMany(Completion, {
   sourceKey: 'id',
   foreignKey: 'ownerId',
   as: 'completions',
+});
+
+Tree.belongsTo(User, {
+  foreignKey: 'ownerId',
+  targetKey: 'id',
+  as: 'owner',
+});
+Tree.hasMany(Sentence, {
+  sourceKey: 'id',
+  foreignKey: 'treeId',
+  as: 'sentences',
+});
+Tree.hasMany(Story, {
+  sourceKey: 'id',
+  foreignKey: 'treeId',
+  as: 'stories',
 });
 
 Sentence.belongsTo(User, {
