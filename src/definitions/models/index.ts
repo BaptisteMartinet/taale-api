@@ -1,3 +1,4 @@
+import { createOneToManyRelationship, createOneToOneRelationship } from 'core/sequelize';
 import User from './User';
 import Tree from './Tree';
 import Sentence from './Sentence';
@@ -7,121 +8,48 @@ import Story from './Story';
 import StorySentenceLink from './StorySentenceLink';
 import EmailValidationCode from './EmailValidationCode';
 
-User.hasMany(Tree, {
-  sourceKey: 'id',
-  foreignKey: 'ownerId',
-  as: 'trees',
+createOneToManyRelationship({
+  from: { model: User, as: 'trees' },
+  to: { model: Tree, key: 'ownerId', as: 'owner' }
 });
-User.hasMany(Sentence, {
-  sourceKey: 'id',
-  foreignKey: 'ownerId',
-  as: 'sentences',
+createOneToManyRelationship({
+  from: { model: User, as: 'sentences' },
+  to: { model: Sentence, key: 'ownerId', as: 'owner' },
 });
-User.hasMany(Report, {
-  sourceKey: 'id',
-  foreignKey: 'ownerId',
-  as: 'reports',
+createOneToManyRelationship({
+  from: { model: User, as: 'reports' },
+  to: { model: Report, key: 'ownerId', as: 'owner' },
 });
-User.hasMany(Completion, {
-  sourceKey: 'id',
-  foreignKey: 'ownerId',
-  as: 'completions',
+createOneToManyRelationship({
+  from: { model: User, as: 'completions' },
+  to: { model: Completion, key: 'ownerId', as: 'owner' },
 });
 
-Tree.belongsTo(User, {
-  foreignKey: 'ownerId',
-  targetKey: 'id',
-  as: 'owner',
+createOneToManyRelationship({
+  from: { model: Tree, as: 'sentences' },
+  to: { model: Sentence, key: 'treeId', as: 'tree' },
 });
-Tree.hasMany(Sentence, {
-  sourceKey: 'id',
-  foreignKey: 'treeId',
-  as: 'sentences',
-});
-Tree.hasMany(Story, {
-  sourceKey: 'id',
-  foreignKey: 'treeId',
-  as: 'stories',
+createOneToManyRelationship({
+  from: { model: Tree, as: 'stories' },
+  to: { model: Story, key: 'treeId', as: 'tree' },
 });
 
-Sentence.belongsTo(User, {
-  foreignKey: 'ownerId',
-  targetKey: 'id',
-  as: 'owner',
+createOneToManyRelationship({
+  from: { model: Sentence, as: 'completions' },
+  to: { model: Completion, key: 'sentenceId', as: 'sentence' },
 });
-Sentence.belongsTo(Tree, {
-  foreignKey: 'treeId',
-  targetKey: 'id',
-  as: 'tree',
+createOneToOneRelationship({
+  from: { model: Sentence, as: 'story' },
+  to: { model: Story, key: 'sentenceId', as: 'sentence' },
 });
-Sentence.belongsTo(Sentence, {
-  foreignKey: 'parentSentenceId',
-  targetKey: 'id',
-  as: 'parentSentence',
-});
-Sentence.hasMany(Sentence, {
-  sourceKey: 'id',
-  foreignKey: 'parentSentenceId',
-  as: 'sentences',
-});
-Sentence.hasMany(Completion, {
-  sourceKey: 'id',
-  foreignKey: 'sentenceId',
-  as: 'completions'
-});
-Sentence.hasOne(Story, {
-  sourceKey: 'id',
-  foreignKey: 'sentenceId',
-  as: 'story',
-});
-Sentence.hasMany(StorySentenceLink, {
-  sourceKey: 'id',
-  foreignKey: 'sentenceId',
-  as: 'storiesLinks',
+createOneToManyRelationship({
+  from: { model: Sentence, as: 'storiesLinks' },
+  to: { model: StorySentenceLink, key: 'sentenceId', as: 'sentence' },
 });
 
-Report.belongsTo(User, {
-  foreignKey: 'ownerId',
-  targetKey: 'id',
-  as: 'owner',
-});
-
-Completion.belongsTo(User, {
-  foreignKey: 'ownerId',
-  targetKey: 'id',
-  as: 'owner',
-});
-Completion.belongsTo(Sentence, {
-  foreignKey: 'sentenceId',
-  targetKey: 'id',
-  as: 'sentence',
-});
-
-Story.belongsTo(Sentence, {
-  foreignKey: 'sentenceId',
-  targetKey: 'id',
-  as: 'sentence',
-});
-Story.belongsTo(Tree, {
-  foreignKey: 'treeId',
-  targetKey: 'id',
-  as: 'tree',
-});
-Story.hasMany(StorySentenceLink, {
-  sourceKey: 'id',
-  foreignKey: 'storyId',
-  as: 'sentencesLinks',
-});
-
-StorySentenceLink.belongsTo(Story, {
-  foreignKey: 'storyId',
-  targetKey: 'id',
-  as: 'story',
-});
-StorySentenceLink.belongsTo(Sentence, {
-  foreignKey: 'sentenceId',
-  targetKey: 'id',
-  as: 'sentence',
+createOneToManyRelationship({
+  from: { model: Story, as: 'sentencesLinks' },
+  to: { model: StorySentenceLink, key: 'storyId', as: 'story' },
 });
 
 export {
