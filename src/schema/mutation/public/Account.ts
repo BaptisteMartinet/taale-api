@@ -19,6 +19,7 @@ import { User, ValidationCode } from 'definitions/models';
 import {
   ensureUsername,
   ensureEmail,
+  createValidationCode,
   ensureValidationCode,
 } from 'definitions/helpers';
 import {
@@ -40,7 +41,7 @@ const AccountMutation = new GraphQLObjectType<unknown, Context>({
         const { email } = args;
         await ensureEmail(email);
         const code = genNumericalCode(EmailVerificationCodeLength);
-        await ValidationCode.upsert({ email, code, action: 'emailVerif' }, { fields: ['code'] });
+        await createValidationCode({ email, code, action: 'emailVerification' });
         await onEmailVerification({ email, code }, ctx);
         return true;
       },
@@ -78,7 +79,7 @@ const AccountMutation = new GraphQLObjectType<unknown, Context>({
         const { username, email } = userArgs;
         await ensureUsername(username);
         await ensureEmail(email);
-        await ensureValidationCode(email, emailValidationCode, 'emailVerif');
+        await ensureValidationCode({ email, code: emailValidationCode, action: 'emailVerification' });
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await User.create({
           password: hashedPassword,
@@ -136,7 +137,7 @@ const AccountMutation = new GraphQLObjectType<unknown, Context>({
       },
       async resolve(source, args, ctx) {
         const { email, newPassword, validationCode } = args;
-        await ensureValidationCode(email, validationCode, 'resetPassword');
+        await ensureValidationCode({ email, code: validationCode, action: 'passwordReset' });
         const user = await User.findOne({ where: { email } });
         if (!user)
           throw new Error('User does not exists');
