@@ -9,12 +9,12 @@ import StorySentenceLink from './StorySentenceLink';
 import EmailValidationCode from './EmailValidationCode';
 
 createOneToManyRelationship({
-  from: { model: User, as: 'trees', onDelete: 'NO ACTION' },
+  from: { model: User, as: 'trees' },
   to: { model: Tree, key: 'ownerId', as: 'owner' }
 });
 createOneToManyRelationship({
-  from: { model: User, as: 'sentences', onDelete: 'NO ACTION' },
-  to: { model: Sentence, key: 'ownerId', as: 'owner' },
+  from: { model: User, as: 'sentences' },
+  to: { model: Sentence, key:'ownerId', as: 'owner' },
 });
 createOneToManyRelationship({
   from: { model: User, as: 'reports', onDelete: 'CASCADE' },
@@ -39,7 +39,7 @@ createOneToManyRelationship({
   to: { model: Completion, key: 'sentenceId', as: 'sentence' },
 });
 createOneToOneRelationship({
-  from: { model: Sentence, as: 'story', onDelete: 'NO ACTION' },
+  from: { model: Sentence, as: 'story', onDelete: 'CASCADE' },
   to: { model: Story, key: 'sentenceId', as: 'sentence' },
 });
 createOneToManyRelationship({

@@ -34,7 +34,7 @@ class Tree extends Model<InferAttributes<Tree>, InferCreationAttributes<Tree>> {
 
 Tree.init({
   id: { type: DataTypes.INTEGER, allowNull: false, autoIncrement: true, primaryKey: true },
-  ownerId: { type: DataTypes.INTEGER, allowNull: false },
+  ownerId: { type: DataTypes.INTEGER, allowNull: true },
   name: { type: DataTypes.STRING, allowNull: false },
   open: { type: DataTypes.BOOLEAN, allowNull: false },
   locale: { type: DataTypes.ENUM, allowNull: false, values: Object.values(Locale) },

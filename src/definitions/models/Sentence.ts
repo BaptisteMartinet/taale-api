@@ -42,7 +42,7 @@ class Sentence extends Model<InferAttributes<Sentence>, InferCreationAttributes<
 
 Sentence.init({
   id: { type: DataTypes.INTEGER, allowNull: false, autoIncrement: true, primaryKey: true },
-  ownerId: { type: DataTypes.INTEGER, allowNull: false },
+  ownerId: { type: DataTypes.INTEGER, allowNull: true },
   treeId: { type: DataTypes.INTEGER, allowNull: false },
   parentSentenceId: { type: DataTypes.INTEGER, allowNull: true },
   text: { type: DataTypes.TEXT, allowNull: false },
