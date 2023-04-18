@@ -15,11 +15,12 @@ import {
   EmailVerificationCodeLength,
   ResetPasswordCodeLength,
 } from 'core/constants';
-import { User, ValidationCode } from 'definitions/models';
+import { User } from 'definitions/models';
 import {
   ensureUsername,
   ensureEmail,
   createValidationCode,
+  getValidationCode,
   ensureValidationCode,
 } from 'definitions/helpers';
 import {
@@ -54,13 +55,7 @@ const AccountMutation = new GraphQLObjectType<unknown, Context>({
       },
       async resolve(_, args, ctx) {
         const { email } = args;
-        const validationCode = await ValidationCode.findOne({
-          where: { email, action: 'emailVerif' },
-          attributes: ['code'],
-        });
-        if (validationCode === null)
-          throw new ClientError(`Unable to find EmailValidationCode for ${email}`, 'InvalidArgument');
-        const { code } = validationCode;
+        const code = await getValidationCode({ email, action: 'emailVerification' });
         await onEmailVerification({ email, code }, ctx);
         return true;
       },
@@ -122,7 +117,7 @@ const AccountMutation = new GraphQLObjectType<unknown, Context>({
       async resolve(source, args, ctx) {
         const { email } = args;
         const code = genNumericalCode(ResetPasswordCodeLength);
-        await ValidationCode.upsert({ email, code, action: 'resetPassword' }, { fields: ['code'] });
+        await createValidationCode({ email, code, action: 'passwordReset' });
         await onInitiatePasswordReset({ email, code }, ctx);
         return true;
       },
