@@ -4,7 +4,7 @@ export type ClientErrorType = (
   'InvalidLoginOrPassword' |
   'InvalidEmailFormat' |
   'EmailTaken' |
-  'InvalidEmailValidationCode' |
+  'InvalidValidationCode' |
   'InvalidUsernameLength' |
   'InvalidUsernameChar' |
   'UsernameTaken' |

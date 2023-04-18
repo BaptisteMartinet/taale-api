@@ -11,14 +11,21 @@ import * as jwt from 'jsonwebtoken';
 import { genNumericalCode } from 'lib/utils';
 import env from 'core/env';
 import { ClientError } from 'core/errors';
-import { EmailVerificationCodeLength } from 'core/constants';
+import {
+  EmailVerificationCodeLength,
+  ResetPasswordCodeLength,
+} from 'core/constants';
 import { User, ValidationCode } from 'definitions/models';
 import {
   ensureUsername,
   ensureEmail,
-  ensureEmailValidationCode,
+  ensureValidationCode,
 } from 'definitions/helpers';
-import { onEmailVerification, onAccountCreated } from 'notification/dispatchers';
+import {
+  onEmailVerification,
+  onAccountCreated,
+  onInitiatePasswordReset,
+} from 'notification/dispatchers';
 import { UserType } from 'schema/output-types';
 
 const AccountMutation = new GraphQLObjectType<unknown, Context>({
@@ -71,7 +78,7 @@ const AccountMutation = new GraphQLObjectType<unknown, Context>({
         const { username, email } = userArgs;
         await ensureUsername(username);
         await ensureEmail(email);
-        await ensureEmailValidationCode(email, emailValidationCode);
+        await ensureValidationCode(email, emailValidationCode, 'emailVerif');
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await User.create({
           password: hashedPassword,
@@ -103,6 +110,39 @@ const AccountMutation = new GraphQLObjectType<unknown, Context>({
           throw new ClientError('Invalid login or pass', 'InvalidLoginOrPassword');
         const token = jwt.sign({ userId: user.id }, env.JWT_SECRET_KEY, { expiresIn: '7d' });
         return { user, token };
+      },
+    },
+
+    initiatePasswordReset: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      args: {
+        email: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      async resolve(source, args, ctx) {
+        const { email } = args;
+        const code = genNumericalCode(ResetPasswordCodeLength);
+        await ValidationCode.upsert({ email, code, action: 'resetPassword' }, { fields: ['code'] });
+        await onInitiatePasswordReset({ email, code }, ctx);
+        return true;
+      },
+    },
+
+    resetPassword: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      args: {
+        email: { type: new GraphQLNonNull(GraphQLString) },
+        newPassword: { type: new GraphQLNonNull(GraphQLString) },
+        validationCode: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      async resolve(source, args, ctx) {
+        const { email, newPassword, validationCode } = args;
+        await ensureValidationCode(email, validationCode, 'resetPassword');
+        const user = await User.findOne({ where: { email } });
+        if (!user)
+          throw new Error('User does not exists');
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        await user.update({ password: hashedPassword });
+        return true;
       },
     },
   },
