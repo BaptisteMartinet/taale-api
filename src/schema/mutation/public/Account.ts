@@ -12,7 +12,7 @@ import { genNumericalCode } from 'lib/utils';
 import env from 'core/env';
 import { ClientError } from 'core/errors';
 import { EmailVerificationCodeLength } from 'core/constants';
-import { User, EmailValidationCode } from 'definitions/models';
+import { User, ValidationCode } from 'definitions/models';
 import {
   ensureUsername,
   ensureEmail,
@@ -33,7 +33,7 @@ const AccountMutation = new GraphQLObjectType<unknown, Context>({
         const { email } = args;
         await ensureEmail(email);
         const code = genNumericalCode(EmailVerificationCodeLength);
-        await EmailValidationCode.upsert({ email, code }, { fields: ['code'] });
+        await ValidationCode.upsert({ email, code, action: 'emailVerif' }, { fields: ['code'] });
         await onEmailVerification({ email, code }, ctx);
         return true;
       },
@@ -46,13 +46,13 @@ const AccountMutation = new GraphQLObjectType<unknown, Context>({
       },
       async resolve(_, args, ctx) {
         const { email } = args;
-        const emailValidationCode = await EmailValidationCode.findOne({
-          where: { email },
+        const validationCode = await ValidationCode.findOne({
+          where: { email, action: 'emailVerif' },
           attributes: ['code'],
         });
-        if (emailValidationCode === null)
+        if (validationCode === null)
           throw new ClientError(`Unable to find EmailValidationCode for ${email}`, 'InvalidArgument');
-        const { code } = emailValidationCode;
+        const { code } = validationCode;
         await onEmailVerification({ email, code }, ctx);
         return true;
       },
