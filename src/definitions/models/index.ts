@@ -6,7 +6,7 @@ import Report from './Report';
 import Completion from './Completion';
 import Story from './Story';
 import StorySentenceLink from './StorySentenceLink';
-import EmailValidationCode from './EmailValidationCode';
+import ValidationCode from './ValidationCode';
 
 createOneToManyAssociation({
   from: { model: User, as: 'trees' },
@@ -64,5 +64,5 @@ export {
   Completion,
   Story,
   StorySentenceLink,
-  EmailValidationCode,
+  ValidationCode,
 };

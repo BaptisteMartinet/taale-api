@@ -7,25 +7,27 @@ import {
 } from 'sequelize';
 import sequelize from 'core/sequelize';
 
-class EmailValidationCode extends Model<InferAttributes<EmailValidationCode>, InferCreationAttributes<EmailValidationCode>> {
+class ValidationCode extends Model<InferAttributes<ValidationCode>, InferCreationAttributes<ValidationCode>> {
   declare id: CreationOptional<number>;
+  declare action: string;
   declare email: string;
   declare code: string;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 }
 
-EmailValidationCode.init({
+ValidationCode.init({
   id: { type: DataTypes.INTEGER, allowNull: false, autoIncrement: true, primaryKey: true },
+  action: { type: DataTypes.STRING, allowNull: false },
   email: { type: DataTypes.STRING, allowNull: false, validate: { isEmail: true } },
   code: { type: DataTypes.STRING, allowNull: false },
   createdAt: DataTypes.DATE,
   updatedAt: DataTypes.DATE,
 }, {
-  tableName: 'email_validation_codes',
+  tableName: 'validation_codes',
   timestamps: true,
-  indexes: [{ fields: ['email'], unique: true, }],
+  indexes: [{ fields: ['action', 'email'], unique: true, }],
   sequelize,
 });
 
-export default EmailValidationCode;
+export default ValidationCode;
