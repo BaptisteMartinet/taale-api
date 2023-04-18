@@ -6,17 +6,17 @@ interface Definition {
   body: string;
 }
 
-const FR: Definition = {
+const fr: Definition = {
   subject: (username) => `Bienvenue sur Taale ${username}`,
   body: "Vous faites officiellement parti de la communauté, amusez vous bien !",
 };
 
-const EN: Definition = {
+const en: Definition = {
   subject: (username) => `Welcome to Taale ${username}`,
   body: "You are now part of our growing community, have fun!",
 }
 
 export default (locale: Locale) => genTexts<Definition>(new Map([
-  [Locale.FR, FR],
-  [Locale.EN, EN],
+  [Locale.FR, fr],
+  [Locale.EN, en],
 ]), locale);

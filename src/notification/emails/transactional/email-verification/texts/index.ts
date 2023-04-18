@@ -6,17 +6,17 @@ interface Definition {
   codeInfo: string;
 }
 
-const FR: Definition = {
+const fr: Definition = {
   subject: "Verifiez votre email",
   codeInfo: "Utilisez le code suivant pour créer votre compte",
 };
 
-const EN: Definition = {
+const en: Definition = {
   subject: "Verify your email",
   codeInfo: "Use the following code to verify your email",
 }
 
 export default (locale: Locale) => genTexts<Definition>(new Map([
-  [Locale.FR, FR],
-  [Locale.EN, EN],
+  [Locale.FR, fr],
+  [Locale.EN, en],
 ]), locale);
