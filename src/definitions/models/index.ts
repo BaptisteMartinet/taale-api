@@ -35,6 +35,10 @@ createOneToManyAssociation({
 });
 
 createOneToManyAssociation({
+  from: { model: Sentence, as: 'sentences', onDelete: 'CASCADE' },
+  to: { model: Sentence, key: 'parentSentenceId', as: 'parentSentence' },
+});
+createOneToManyAssociation({
   from: { model: Sentence, as: 'completions', onDelete: 'CASCADE' },
   to: { model: Completion, key: 'sentenceId', as: 'sentence' },
 });
