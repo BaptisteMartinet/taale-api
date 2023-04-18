@@ -15,9 +15,10 @@ const TreeMutation = new GraphQLObjectType<unknown, Context>({
         name: { type: new GraphQLNonNull(GraphQLString) },
         open: { type: new GraphQLNonNull(GraphQLBoolean) },
         locale: { type: new GraphQLNonNull(LocaleEnum) },
+        initialSentence: { type: GraphQLString },
       },
       resolve: async (source, args, ctx) => {
-        const { name, open, locale } = args;
+        const { name, open, locale, initialSentence } = args;
         const { currentUser } = ctx;
         assert(currentUser);
         const tree = await Tree.create({
@@ -26,7 +27,7 @@ const TreeMutation = new GraphQLObjectType<unknown, Context>({
           open,
           locale,
         });
-        const initialText = genInitialSentenceText(locale);
+        const initialText = initialSentence || genInitialSentenceText(locale);
         await Sentence.create({
           ownerId: currentUser.id,
           treeId: tree.id,
