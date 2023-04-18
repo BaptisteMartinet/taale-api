@@ -27,6 +27,7 @@ import {
   onEmailVerification,
   onAccountCreated,
   onInitiatePasswordReset,
+  onPasswordResetSuccess,
 } from 'notification/dispatchers';
 import { UserType } from 'schema/output-types';
 
@@ -138,6 +139,7 @@ const AccountMutation = new GraphQLObjectType<unknown, Context>({
           throw new Error('User does not exists');
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         await user.update({ password: hashedPassword });
+        await onPasswordResetSuccess({ email }, ctx);
         return true;
       },
     },
