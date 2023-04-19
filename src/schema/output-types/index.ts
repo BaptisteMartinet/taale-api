@@ -72,7 +72,6 @@ export const StoryType = new GraphQLObjectType<Story, Context>({
             },
             {
               association: Sentence.associations.owner,
-              required: true,
             },
           ],
         });
