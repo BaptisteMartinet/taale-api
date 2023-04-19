@@ -117,6 +117,8 @@ const AccountMutation = new GraphQLObjectType<unknown, Context>({
       },
       async resolve(source, args, ctx) {
         const { email } = args;
+        if (await User.count({ where: { email } }) <= 0)
+          return true;
         const code = genNumericalCode(ResetPasswordCodeLength);
         await createValidationCode({ email, code, action: 'resetPassword' });
         await onForgotPassword({ email, code }, ctx);
