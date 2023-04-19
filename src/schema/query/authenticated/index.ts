@@ -45,10 +45,7 @@ const AuthenticatedQuery = new GraphQLObjectType<unknown, Context>({
         const sentencesIds = await ascendSentencesIdsWithLimit(randomSentence.id, PartialStoryNbSentences);
         return Sentence.findAll({
           where: { id: { [Op.in]: sentencesIds } },
-          include: {
-            association: Sentence.associations.owner,
-            required: true,
-          },
+          include: { association: Sentence.associations.owner },
         });
       },
     },
