@@ -38,7 +38,7 @@ const TreeMutation = new GraphQLObjectType<unknown, Context>({
     },
 
     close: {
-      type: GraphQLBoolean,
+      type: new GraphQLNonNull(GraphQLBoolean),
       resolve: async (source, args, ctx) => {
         assert(source instanceof Tree);
         await source.update({ open: false });
