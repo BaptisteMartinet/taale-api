@@ -26,7 +26,7 @@ import {
 import {
   onEmailVerification,
   onAccountCreated,
-  onInitiatePasswordReset,
+  onForgotPassword,
   onPasswordResetSuccess,
 } from 'notification/dispatchers';
 import { UserType } from 'schema/output-types';
@@ -110,7 +110,7 @@ const AccountMutation = new GraphQLObjectType<unknown, Context>({
       },
     },
 
-    initiatePasswordReset: {
+    forgotPassword: {
       type: new GraphQLNonNull(GraphQLBoolean),
       args: {
         email: { type: new GraphQLNonNull(GraphQLString) },
@@ -118,8 +118,8 @@ const AccountMutation = new GraphQLObjectType<unknown, Context>({
       async resolve(source, args, ctx) {
         const { email } = args;
         const code = genNumericalCode(ResetPasswordCodeLength);
-        await createValidationCode({ email, code, action: 'passwordReset' });
-        await onInitiatePasswordReset({ email, code }, ctx);
+        await createValidationCode({ email, code, action: 'resetPassword' });
+        await onForgotPassword({ email, code }, ctx);
         return true;
       },
     },
@@ -133,7 +133,7 @@ const AccountMutation = new GraphQLObjectType<unknown, Context>({
       },
       async resolve(source, args, ctx) {
         const { email, newPassword, validationCode } = args;
-        await ensureValidationCode({ email, code: validationCode, action: 'passwordReset' });
+        await ensureValidationCode({ email, code: validationCode, action: 'resetPassword' });
         const user = await User.findOne({ where: { email } });
         if (!user)
           throw new Error('User does not exists');

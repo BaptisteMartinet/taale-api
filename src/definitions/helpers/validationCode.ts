@@ -1,7 +1,7 @@
 import { ClientError } from 'core/errors';
 import { ValidationCode } from 'definitions/models';
 
-export type Action = 'emailVerification' | 'passwordReset';
+export type Action = 'emailVerification' | 'resetPassword';
 
 export interface ValidationCodeArgs {
   email: string;

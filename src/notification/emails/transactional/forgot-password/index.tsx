@@ -5,12 +5,12 @@ import { ensureStylesType, renderEmailHTMLPage } from 'notification/emails/utils
 import { Header, Footer } from 'notification/emails/fragments';
 import texts from './texts';
 
-export interface InitiatePasswordResetProps {
+export interface ForgotPasswordProps {
   code: string,
   ctx: Context,
 }
 
-function InitiatePasswordReset(props: InitiatePasswordResetProps) {
+function ForgotPassword(props: ForgotPasswordProps) {
   const { code, ctx } = props;
   const T = texts(ctx.locale);
   return (
@@ -27,9 +27,9 @@ function InitiatePasswordReset(props: InitiatePasswordResetProps) {
   );
 }
 
-export default function render(args: InitiatePasswordResetProps) {
+export default function render(args: ForgotPasswordProps) {
   return renderEmailHTMLPage({
-    element: InitiatePasswordReset(args),
+    element: ForgotPassword(args),
   });
 }
 
