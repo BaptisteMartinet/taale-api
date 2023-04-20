@@ -34,8 +34,8 @@ const AuthenticatedQuery = new GraphQLObjectType<unknown, Context>({
         const randomSentence = await Sentence.findOne({
           include: {
             association: Sentence.associations.tree,
-            required: true,
             where: { locale },
+            required: true,
           },
           where: { theEnd: false },
           order: sequelize.random(),
