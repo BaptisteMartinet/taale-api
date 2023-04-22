@@ -1,6 +1,6 @@
 import type { Model, ModelStatic } from 'sequelize';
 
-type AssociationType = 'RESTRICT' | 'CASCADE' | 'NO ACTION' | 'SET NULL' | 'SET DEFAULT';
+type AssociationType = 'SET NULL' | 'RESTRICT' | 'CASCADE' | 'NO ACTION' | 'SET DEFAULT';
 
 interface AssociationDefinition<M extends Model> {
   model: ModelStatic<M>,
