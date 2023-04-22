@@ -16,6 +16,7 @@ class StorySentenceLink extends Model<InferAttributes<StorySentenceLink>, InferC
   declare id: CreationOptional<number>;
   declare storyId: ForeignKey<number>;
   declare sentenceId: ForeignKey<number>;
+  declare position: number;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
@@ -31,6 +32,7 @@ StorySentenceLink.init({
   id: { type: DataTypes.INTEGER, allowNull: false, autoIncrement: true, primaryKey: true },
   storyId: { type: DataTypes.INTEGER, allowNull: false },
   sentenceId: { type: DataTypes.INTEGER, allowNull: false },
+  position: { type: DataTypes.INTEGER, allowNull: false },
   createdAt: DataTypes.DATE,
   updatedAt: DataTypes.DATE,
 }, {

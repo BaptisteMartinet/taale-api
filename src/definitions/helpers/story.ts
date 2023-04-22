@@ -24,9 +24,10 @@ export async function createStory(sentence: Sentence) {
     treeId: sentence.treeId,
     title,
   });
-  await StorySentenceLink.bulkCreate(sentencesIds.map(sentenceId => ({
+  await StorySentenceLink.bulkCreate(sentencesIds.map((sentenceId, idx) => ({
     storyId: story.id,
     sentenceId,
+    position: idx,
   })));
   return story;
 }
