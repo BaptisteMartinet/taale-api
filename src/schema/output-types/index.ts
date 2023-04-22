@@ -49,9 +49,9 @@ export const SentenceType = new GraphQLObjectType({
   fields: () => ({
     id: { type: new GraphQLNonNull(GraphQLInt) },
     text: { type: new GraphQLNonNull(GraphQLString) },
-    owner: { type: UserRestrictedType },
     createdAt: { type: new GraphQLNonNull(GraphQLDate) },
     updatedAt: { type: new GraphQLNonNull(GraphQLDate) },
+    owner: { type: UserRestrictedType },
   }),
 });
 
