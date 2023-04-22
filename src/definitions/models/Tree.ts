@@ -15,7 +15,7 @@ import { Locale } from 'definitions/enums';
 
 class Tree extends Model<InferAttributes<Tree>, InferCreationAttributes<Tree>> {
   declare id: CreationOptional<number>;
-  declare ownerId: ForeignKey<number>;
+  declare ownerId: ForeignKey<number | null>;
   declare name: string;
   declare open: boolean;
   declare locale: Locale;
