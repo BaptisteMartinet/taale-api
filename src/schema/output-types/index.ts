@@ -49,7 +49,7 @@ export const SentenceType = new GraphQLObjectType({
   fields: () => ({
     id: { type: new GraphQLNonNull(GraphQLInt) },
     text: { type: new GraphQLNonNull(GraphQLString) },
-    parentSentenceId: { type: new GraphQLNonNull(GraphQLInt) },
+    parentSentenceId: { type: GraphQLInt },
     createdAt: { type: new GraphQLNonNull(GraphQLDate) },
     updatedAt: { type: new GraphQLNonNull(GraphQLDate) },
     owner: { type: UserRestrictedType },
