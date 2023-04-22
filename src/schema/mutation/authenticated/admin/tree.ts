@@ -29,7 +29,6 @@ const TreeMutation = new GraphQLObjectType<unknown, Context>({
         });
         const initialText = initialSentence || genInitialSentenceText(locale);
         await Sentence.create({
-          ownerId: currentUser.id,
           treeId: tree.id,
           text: initialText,
         });
