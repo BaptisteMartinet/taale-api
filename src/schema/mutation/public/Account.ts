@@ -8,7 +8,7 @@ import {
 } from 'graphql';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
-import { genNumericalCode } from 'lib/utils';
+import { genNumericalCode, genAlphaNumericCode } from 'lib/utils';
 import env from 'core/env';
 import { ClientError } from 'core/errors';
 import {
@@ -119,7 +119,7 @@ const AccountMutation = new GraphQLObjectType<unknown, Context>({
         const { email } = args;
         if (await User.count({ where: { email } }) <= 0)
           return true;
-        const code = genNumericalCode(ResetPasswordCodeLength);
+        const code = genAlphaNumericCode(ResetPasswordCodeLength);
         await createValidationCode({ email, code, action: 'resetPassword' });
         await onForgotPassword({ email, code }, ctx);
         return true;
