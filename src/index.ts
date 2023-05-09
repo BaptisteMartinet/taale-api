@@ -30,4 +30,4 @@ async function init() {
   console.info(`🚀 Server ready at: ${url}`);
 }
 
-init().catch((e) => { console.error(e) });
+init().catch(console.error);
