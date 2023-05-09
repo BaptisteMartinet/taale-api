@@ -14,7 +14,7 @@ export const EmailVerificationCodeLength = 6;
 export const EmailValidationRegex = new RegExp('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$');
 export const UsernameMinLength = 2;
 export const UsernameMaxLength = 24;
-export const UsernameValidationRegex = new RegExp(`^[\\w\\.]{${UsernameMinLength},${UsernameMaxLength}}$`);
+export const UsernameValidationRegex = new RegExp(`^\\w{${UsernameMinLength},${UsernameMaxLength}}$`);
 export const PasswordMinLength = 4;
 
 export const ResetPasswordCodeLength = 8;
